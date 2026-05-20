@@ -86,10 +86,28 @@
             <div id="error-text" class="error-message__text"></div>
         </div>
 
-        <!-- Route Results -->
-        <section id="route-results" class="route-results" aria-label="Route results">
+        <!-- Route Results (Full Timeline) -->
+        <section id="route-results" class="route-results hidden" aria-label="Route results">
+            <div class="route-results__header">
+                <button id="route-back-btn" class="route-back-btn" type="button" aria-label="Back to chat">← Back to Chat</button>
+                <h2>Full Route Details</h2>
+            </div>
             <div id="route-summary" class="route-summary"></div>
             <div id="route-timeline" class="route-timeline"></div>
+        </section>
+
+        <!-- Chat View -->
+        <section id="chat-view" class="chat-view hidden" aria-label="Interactive route chat">
+            <div class="chat-header">
+                <button id="chat-back-btn" class="chat-header__btn" type="button" aria-label="Back to search">← Search</button>
+                <div class="chat-header__title">
+                    <span class="chat-header__avatar">🚇</span>
+                    Guide
+                </div>
+                <button id="chat-route-btn" class="chat-header__btn chat-header__btn--primary" type="button" aria-label="View full route">🗺️ Route</button>
+            </div>
+            <div id="chat-messages" class="chat-messages"></div>
+            <div id="chat-options" class="chat-options"></div>
         </section>
 
         <!-- Line Legend -->
@@ -110,6 +128,7 @@
     <!-- Scripts -->
     <script src="js/metro-data.js"></script>
     <script src="js/route-finder.js"></script>
+    <script src="js/chat.js"></script>
     <script src="js/ui.js"></script>
     <script>
         // Initialize the app

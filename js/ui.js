@@ -309,6 +309,9 @@ const UI = (() => {
         }
 
         renderRoute(result);
+        
+        // Start the interactive chat companion
+        Chat.startChat(result, selectedFrom, selectedTo);
     }
 
     /**
