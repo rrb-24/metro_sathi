@@ -162,12 +162,20 @@ const MetroData = (() => {
     /**
      * Search stations by query (fuzzy prefix match).
      * @param {string} query
+     * @param {boolean} includeUpcoming
      * @returns {Array} Matching station entries
      */
-    function searchStations(query) {
+    function searchStations(query, includeUpcoming = false) {
         if (!query || query.trim().length === 0) return [];
         const q = query.toLowerCase().trim();
-        return allStationNames.filter(entry =>
+        
+        let validStations = allStationNames;
+        if (!includeUpcoming) {
+            // Only include stations that have at least one active line
+            validStations = validStations.filter(entry => entry.lines.some(l => l.isActive));
+        }
+
+        return validStations.filter(entry =>
             entry.name.toLowerCase().includes(q)
         ).slice(0, 12); // Limit results
     }

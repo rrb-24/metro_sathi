@@ -9,9 +9,10 @@ const RouteFinder = (() => {
      * Find the shortest route between two stations.
      * @param {string} fromStation - Source station name
      * @param {string} toStation - Destination station name
+     * @param {boolean} includeUpcoming - Whether to include inactive lines
      * @returns {{ segments: Array, totalStops: number, totalInterchanges: number, estimatedMinutes: number } | null}
      */
-    function findRoute(fromStation, toStation) {
+    function findRoute(fromStation, toStation, includeUpcoming = false) {
         if (fromStation === toStation) return null;
         if (!MetroData.isValidStation(fromStation) || !MetroData.isValidStation(toStation)) return null;
 
@@ -21,9 +22,19 @@ const RouteFinder = (() => {
 
         if (sourceEntries.length === 0 || destEntries.length === 0) return null;
 
+        // Filter out inactive lines if toggle is off
+        let validSourceEntries = sourceEntries;
+        let validDestEntries = destEntries;
+        if (!includeUpcoming) {
+            validSourceEntries = sourceEntries.filter(e => MetroData.getLine(e.line).is_active);
+            validDestEntries = destEntries.filter(e => MetroData.getLine(e.line).is_active);
+        }
+
+        if (validSourceEntries.length === 0 || validDestEntries.length === 0) return null;
+
         // Create start and end node keys
-        const startKeys = sourceEntries.map(e => MetroData.makeNodeKey(fromStation, e.line));
-        const endKeys = new Set(destEntries.map(e => MetroData.makeNodeKey(toStation, e.line)));
+        const startKeys = validSourceEntries.map(e => MetroData.makeNodeKey(fromStation, e.line));
+        const endKeys = new Set(validDestEntries.map(e => MetroData.makeNodeKey(toStation, e.line)));
 
         // BFS
         const queue = [];
@@ -48,6 +59,10 @@ const RouteFinder = (() => {
 
             const neighbors = MetroData.graph[current] || [];
             for (const neighbor of neighbors) {
+                if (!includeUpcoming && !MetroData.getLine(neighbor.line).is_active) {
+                    continue; // Skip inactive lines if toggle is off
+                }
+
                 if (!visited.has(neighbor.nodeKey)) {
                     visited.add(neighbor.nodeKey);
                     parent[neighbor.nodeKey] = current;

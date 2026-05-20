@@ -6,7 +6,7 @@
 const UI = (() => {
     // DOM element references
     let fromInput, toInput, fromDropdown, toDropdown;
-    let fromClear, toClear, swapBtn, searchBtn;
+    let fromClear, toClear, swapBtn, searchBtn, includeUpcomingToggle;
     let routeResults, routeTimeline, routeSummary;
     let errorMessage, errorText;
     let lineLegendItems;
@@ -30,6 +30,7 @@ const UI = (() => {
         toClear = document.getElementById('to-clear');
         swapBtn = document.getElementById('swap-btn');
         searchBtn = document.getElementById('search-btn');
+        includeUpcomingToggle = document.getElementById('include-upcoming-toggle');
         routeResults = document.getElementById('route-results');
         routeTimeline = document.getElementById('route-timeline');
         routeSummary = document.getElementById('route-summary');
@@ -40,6 +41,23 @@ const UI = (() => {
         // Setup autocomplete for both fields
         setupAutocomplete(fromInput, fromDropdown, 'from');
         setupAutocomplete(toInput, toDropdown, 'to');
+
+        // Toggle upcoming lines
+        includeUpcomingToggle.addEventListener('change', () => {
+            // Re-trigger search if we already have a valid route
+            if (selectedFrom && selectedTo && routeResults.classList.contains('active')) {
+                handleSearch();
+            }
+            
+            // If dropdowns are active, re-render them with new filter
+            if (activeDropdown) {
+                const isFrom = activeDropdown === fromDropdown;
+                const input = isFrom ? fromInput : toInput;
+                const field = isFrom ? 'from' : 'to';
+                const results = MetroData.searchStations(input.value, includeUpcomingToggle.checked);
+                renderDropdown(activeDropdown, results, field);
+            }
+        });
 
         // Clear buttons
         fromClear.addEventListener('click', () => {
@@ -85,14 +103,14 @@ const UI = (() => {
             else selectedTo = '';
             updateSearchButton();
 
-            const results = MetroData.searchStations(query);
+            const results = MetroData.searchStations(query, includeUpcomingToggle.checked);
             renderDropdown(dropdown, results, field);
         });
 
         input.addEventListener('focus', () => {
             const query = input.value;
             if (query.length > 0) {
-                const results = MetroData.searchStations(query);
+                const results = MetroData.searchStations(query, includeUpcomingToggle.checked);
                 renderDropdown(dropdown, results, field);
             }
         });
@@ -282,7 +300,8 @@ const UI = (() => {
             return;
         }
 
-        const result = RouteFinder.findRoute(selectedFrom, selectedTo);
+        const includeUpcoming = includeUpcomingToggle.checked;
+        const result = RouteFinder.findRoute(selectedFrom, selectedTo, includeUpcoming);
 
         if (!result) {
             showError('No route found between these stations.');
