@@ -254,10 +254,12 @@ body::before {
 
 /* Swap button */
 .swap-btn {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
+    align-self: flex-end;
+    margin-top: -24px;
+    margin-bottom: -24px;
+    margin-right: 16px;
+    position: relative;
+    z-index: 2;
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -278,7 +280,6 @@ body::before {
     color: white;
     border-color: var(--accent);
     box-shadow: var(--shadow-glow);
-    transform: translateY(-50%) rotate(180deg);
 }
 
 /* Autocomplete dropdown */
