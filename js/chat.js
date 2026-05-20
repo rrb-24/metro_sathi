@@ -111,11 +111,21 @@ const Chat = (() => {
                 break;
 
             case STATES.JOURNEY:
-                addBotMessage(`Awesome. Your stop is **${segment.deboardAt}**.`);
+                const isFinalSegment = currentSegmentIndex === routeData.segments.length - 1;
+
+                if (isFinalSegment) {
+                    addBotMessage(`Awesome! We are on the final stretch to **${segment.deboardAt}**.`);
+                } else {
+                    addBotMessage(`Awesome! Since we need to switch lines later, your stop on this train will be the interchange at **${segment.deboardAt}**.`);
+                }
+
                 addBotMessage(`It is **${segment.stops} stop${segment.stops !== 1 ? 's' : ''}** away and will take about **${segment.estimatedMinutes} minutes**.`);
                 
                 setTimeout(() => {
-                    addBotMessage(`Have you reached ${segment.deboardAt} and stepped off the train?`);
+                    if (!isFinalSegment) {
+                        addBotMessage(`Please deboard the train when you arrive at **${segment.deboardAt}**.`);
+                    }
+                    addBotMessage(`Have you reached **${segment.deboardAt}** and stepped off the train?`);
                     setOptions([
                         { text: 'Yes, I have deboarded', action: () => {
                             handleUserReply('Yes, I have deboarded');
