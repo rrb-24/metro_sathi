@@ -1,0 +1,70 @@
+{
+    "is_active": false,
+    "line_name": "BLUE",
+    "color": "#2196F3",
+
+    "terminals": {
+        "start": "Central Silk Board",
+        "end": "KIA Terminal"
+    },
+
+    "stations": [
+        "Central Silk Board",
+        "HSR Layout",
+        "Agara",
+        "Ibbalur",
+        "Bellandur",
+        "Kadubeesanahalli",
+        "Kodibeesanahalli",
+        "Marathahalli",
+        "ISRO",
+        "Doddanekundi",
+        "DRDO Sports Complex",
+        "Saraswathi Nagar",
+        "Krishnarajapura (K.R.Pura)",
+        "Kasturi Nagar",
+        "Horamavu",
+        "HRBR Layout",
+        "Kalyan Nagar",
+        "HBR Layout",
+        "Nagawara",
+        "Veeranna Palya",
+        "Kempapura",
+        "Hebbal",
+        "Kodigehalli",
+        "Jakkur Cross",
+        "Yelahanka",
+        "Bagalur Cross",
+        "Bettahalasuru",
+        "Doddajala",
+        "Airport City",
+        "KIA Terminal"
+    ],
+
+    "platforms": {
+        "default": {
+            "towards_start": 1,
+            "towards_end": 2
+        },
+        "overrides": {
+            "Central Silk Board": {
+                "towards_start": 1,
+                "towards_end": 2
+            },
+            "Krishnarajapura (K.R.Pura)": {
+                "towards_start": 1,
+                "towards_end": 2
+            },
+            "Nagawara": {
+                "towards_start": 1,
+                "towards_end": 2
+            }
+        }
+    },
+
+    "interchanges": {
+        "Central Silk Board": ["YELLOW"],
+        "Krishnarajapura (K.R.Pura)": ["PURPLE"],
+        "Nagawara": ["PINK"]
+    }
+}

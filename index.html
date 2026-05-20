@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Metro Sathi — Your Namma Metro companion. Find the best route between any two Bangalore metro stations with step-by-step platform and direction guidance.">
+    <meta name="theme-color" content="#0a0a14">
+    <title>Metro Sathi — Namma Metro Route Finder</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚇</text></svg>">
+</head>
+<body>
+    <div id="app">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header__logo">
+                <div class="header__icon">🚇</div>
+                <h1 class="header__title">Metro Sathi</h1>
+            </div>
+            <p class="header__subtitle">Your Namma Metro Companion</p>
+        </header>
+
+        <!-- Search Panel -->
+        <section class="search-panel" aria-label="Route search">
+            <div class="search-panel__fields">
+
+                <!-- From Station -->
+                <div class="search-field">
+                    <label class="search-field__label" for="from-input">From</label>
+                    <div class="search-field__input-wrapper">
+                        <span class="search-field__icon">📍</span>
+                        <input
+                            type="text"
+                            id="from-input"
+                            class="search-field__input"
+                            placeholder="Enter source station..."
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                        <button id="from-clear" class="search-field__clear" type="button" aria-label="Clear source">✕</button>
+                    </div>
+                    <div id="from-dropdown" class="autocomplete" role="listbox"></div>
+                </div>
+
+                <!-- Swap Button -->
+                <button id="swap-btn" class="swap-btn" type="button" aria-label="Swap stations" title="Swap stations">⇅</button>
+
+                <!-- To Station -->
+                <div class="search-field">
+                    <label class="search-field__label" for="to-input">To</label>
+                    <div class="search-field__input-wrapper">
+                        <span class="search-field__icon">🎯</span>
+                        <input
+                            type="text"
+                            id="to-input"
+                            class="search-field__input"
+                            placeholder="Enter destination station..."
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                        <button id="to-clear" class="search-field__clear" type="button" aria-label="Clear destination">✕</button>
+                    </div>
+                    <div id="to-dropdown" class="autocomplete" role="listbox"></div>
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="search-panel__actions">
+                <button id="search-btn" class="search-btn" type="button" disabled>
+                    Find Route 🚀
+                </button>
+            </div>
+        </section>
+
+        <!-- Error Message -->
+        <div id="error-message" class="error-message" role="alert">
+            <div class="error-message__icon">😕</div>
+            <div id="error-text" class="error-message__text"></div>
+        </div>
+
+        <!-- Route Results -->
+        <section id="route-results" class="route-results" aria-label="Route results">
+            <div id="route-summary" class="route-summary"></div>
+            <div id="route-timeline" class="route-timeline"></div>
+        </section>
+
+        <!-- Line Legend -->
+        <div class="line-legend">
+            <div class="line-legend__title">Metro Lines</div>
+            <div id="line-legend-items" class="line-legend__items"></div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer__text">
+                Made with <span class="footer__heart">♥</span> for Bengaluru commuters<br>
+                Always check official Namma Metro timings before travel
+            </p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/metro-data.js"></script>
+    <script src="js/route-finder.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+        // Initialize the app
+        (async () => {
+            try {
+                await MetroData.load();
+                UI.init();
+                console.log('Metro Sathi loaded successfully!');
+                console.log(`Loaded ${MetroData.allStationNames.length} stations across ${Object.keys(MetroData.getAllLines()).length} lines`);
+            } catch (err) {
+                console.error('Failed to load Metro Sathi:', err);
+                document.getElementById('error-text').textContent = 'Failed to load station data. Please refresh the page.';
+                document.getElementById('error-message').classList.add('active');
+            }
+        })();
+    </script>
+</body>
+</html>

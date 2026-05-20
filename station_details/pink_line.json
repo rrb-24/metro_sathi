@@ -1,0 +1,58 @@
+{
+    "is_active": false,
+    "line_name": "PINK",
+    "color": "#E91E63",
+
+    "terminals": {
+        "start": "Kalena Agrahara",
+        "end": "Nagawara"
+    },
+
+    "stations": [
+        "Kalena Agrahara",
+        "Hulimavu",
+        "I.I.M.B",
+        "J.P. Nagar 4th Phase",
+        "Jayadeva Hospital",
+        "Tavarekere",
+        "Dairy Circle",
+        "Lakkasandra",
+        "Langford Town",
+        "Rashtriya Military School",
+        "Mahatma Gandhi Road",
+        "Shivajinagar",
+        "Cantonment",
+        "Pottery Town",
+        "Tannery Road",
+        "Venkateshpura",
+        "Kadugondanahalli",
+        "Nagawara"
+    ],
+
+    "platforms": {
+        "default": {
+            "towards_start": 1,
+            "towards_end": 2
+        },
+        "overrides": {
+            "Mahatma Gandhi Road": {
+                "towards_start": 1,
+                "towards_end": 2
+            },
+            "Jayadeva Hospital": {
+                "towards_start": 1,
+                "towards_end": 2
+            },
+            "Nagawara": {
+                "towards_start": 1,
+                "towards_end": 2
+            }
+        }
+    },
+
+    "interchanges": {
+        "Mahatma Gandhi Road": ["PURPLE"],
+        "Jayadeva Hospital": ["YELLOW"],
+        "Nagawara": ["BLUE"]
+    }
+}

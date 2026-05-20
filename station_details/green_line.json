@@ -1,0 +1,67 @@
+{
+    "is_active": true,
+    "line_name": "GREEN",
+    "color": "#4CAF50",
+
+    "terminals": {
+        "start": "Madavara",
+        "end": "Silk Institute"
+    },
+
+    "stations": [
+        "Madavara",
+        "Chikkabidarakallu",
+        "Manjunathanagara",
+        "Nagasandra",
+        "Dasarahalli",
+        "Jalahalli",
+        "Peenya Industry",
+        "Peenya",
+        "Goraguntepalya",
+        "Yeshwanthpur",
+        "Sandal Soap Factory",
+        "Mahalakshmi",
+        "Rajajinagara",
+        "Mahakavi Kuvempu Road",
+        "Srirampura",
+        "Mantri Square Sampige Road",
+        "Nadaprabhu Kempegowda Station, Majestic",
+        "Chikkapete",
+        "Krishna Rajendra Market",
+        "National College",
+        "Lalbagh",
+        "South End Circle",
+        "Jayanagar",
+        "Rashtreeya Vidyalaya Road",
+        "Banashankari",
+        "Jayaprakash Nagar",
+        "Yelachenahalli",
+        "Konanakunte Cross",
+        "Doddakallasandra",
+        "Vajarahalli",
+        "Thalaghattapura",
+        "Silk Institute"
+    ],
+
+    "platforms": {
+        "default": {
+            "towards_start": 1,
+            "towards_end": 2
+        },
+        "overrides": {
+            "Nadaprabhu Kempegowda Station, Majestic": {
+                "towards_start": 3,
+                "towards_end": 4
+            },
+            "Rashtreeya Vidyalaya Road": {
+                "towards_start": 1,
+                "towards_end": 2
+            }
+        }
+    },
+
+    "interchanges": {
+        "Nadaprabhu Kempegowda Station, Majestic": ["PURPLE"],
+        "Rashtreeya Vidyalaya Road": ["YELLOW"]
+    }
+}

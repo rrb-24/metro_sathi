@@ -1,0 +1,56 @@
+{
+    "is_active": true,
+    "line_name": "YELLOW",
+    "color": "#FFCA28",
+
+    "terminals": {
+        "start": "Rashtreeya Vidyalaya Road",
+        "end": "Delta Electronics Bommasandra"
+    },
+
+    "stations": [
+        "Rashtreeya Vidyalaya Road",
+        "Ragigudda",
+        "Jayadeva Hospital",
+        "BTM Layout",
+        "Central Silk Board",
+        "Bommanahalli",
+        "Hongasandra",
+        "Kudlu Gate",
+        "Singasandra",
+        "Hosa Road",
+        "Beratena Agrahara",
+        "Electronic City",
+        "Infosys Foundation Konappana Agrahara",
+        "Huskur Road",
+        "Biocon Hebbagodi",
+        "Delta Electronics Bommasandra"
+    ],
+
+    "platforms": {
+        "default": {
+            "towards_start": 1,
+            "towards_end": 2
+        },
+        "overrides": {
+            "Rashtreeya Vidyalaya Road": {
+                "towards_start": 1,
+                "towards_end": 2
+            },
+            "Jayadeva Hospital": {
+                "towards_start": 1,
+                "towards_end": 2
+            },
+            "Central Silk Board": {
+                "towards_start": 1,
+                "towards_end": 2
+            }
+        }
+    },
+
+    "interchanges": {
+        "Rashtreeya Vidyalaya Road": ["GREEN"],
+        "Jayadeva Hospital": ["PINK"],
+        "Central Silk Board": ["BLUE"]
+    }
+}

@@ -1,0 +1,77 @@
+{
+    "is_active": true,
+    "line_name": "PURPLE",
+    "color": "#9C27B0",
+
+    "terminals": {
+        "start": "Whitefield (Kadugodi)",
+        "end": "Challaghatta"
+    },
+
+    "stations": [
+        "Whitefield (Kadugodi)",
+        "Hopefarm Channasandra",
+        "Kadugodi Tree Park",
+        "Pattandur Agrahara",
+        "Sri Sathya Sai Hospital",
+        "Nallurhalli",
+        "Kundalahalli",
+        "Seetharama Palya",
+        "Hoodi",
+        "Garudacharpalya",
+        "Singayyanapalya",
+        "Krishnarajapura (K.R.Pura)",
+        "Benniganahalli",
+        "Baiyappanahalli",
+        "Swami Vivekananda Road",
+        "Indiranagar",
+        "Halasuru",
+        "Trinity",
+        "Mahatma Gandhi Road",
+        "Cubbon Park",
+        "Dr. B. R. Ambedkar Station, Vidhana Soudha",
+        "Sir M. Visvesvaraya Station, Central College",
+        "Nadaprabhu Kempegowda Station, Majestic",
+        "Krantivira Sangolli Rayanna Railway Station",
+        "Magadi Road",
+        "Sri Balagangadharanatha Swamiji Station, Hosahalli",
+        "Vijayanagar",
+        "Attiguppe",
+        "Deepanjali Nagar",
+        "Mysuru Road",
+        "Nayandahalli",
+        "Rajarajeshwari Nagar",
+        "Jnanabharathi",
+        "Pattanagere",
+        "Kengeri Bus Terminal",
+        "Kengeri",
+        "Challaghatta"
+    ],
+
+    "platforms": {
+        "default": {
+            "towards_start": 1,
+            "towards_end": 2
+        },
+        "overrides": {
+            "Nadaprabhu Kempegowda Station, Majestic": {
+                "towards_start": 1,
+                "towards_end": 2
+            },
+            "Krishnarajapura (K.R.Pura)": {
+                "towards_start": 1,
+                "towards_end": 2
+            },
+            "Mahatma Gandhi Road": {
+                "towards_start": 1,
+                "towards_end": 2
+            }
+        }
+    },
+
+    "interchanges": {
+        "Nadaprabhu Kempegowda Station, Majestic": ["GREEN"],
+        "Krishnarajapura (K.R.Pura)": ["BLUE"],
+        "Mahatma Gandhi Road": ["PINK"]
+    }
+}
