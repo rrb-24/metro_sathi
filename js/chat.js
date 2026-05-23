@@ -226,45 +226,75 @@ const Chat = (() => {
     }
 
     function createLiveRouteCard(segment) {
-        const card = document.createElement('div');
-        card.className = 'live-route-card';
-        card.style.borderLeftColor = segment.color;
+        const div = document.createElement('div');
+        div.className = 'route-segment live-route-card';
+        div.style.setProperty('--segment-color', segment.color);
 
-        const header = document.createElement('div');
-        header.className = 'live-route-card__header';
-        header.innerHTML = `
-            <span class="live-route-card__line-name" style="background-color: ${segment.color}">${segment.line} Line</span>
-            <span class="live-route-card__gps-status" id="gps-status-indicator">📡 Locating...</span>
+        let stationsHtml = '';
+
+        // Board station
+        stationsHtml += `
+            <div class="segment__station segment__station--board" data-index="0">
+                <span class="live-station-name">Board at ${formatStation(segment.boardAt)}</span>
+                <span class="segment__station-platform">Platform ${segment.platform}</span>
+            </div>
         `;
-        card.appendChild(header);
 
-        const list = document.createElement('div');
-        list.className = 'live-route-card__stations';
-        list.id = 'live-card-stations';
-
-        segment.stations.forEach((station, index) => {
-            const stDiv = document.createElement('div');
-            stDiv.className = 'live-route-card__station';
-            if (index === 0) stDiv.classList.add('passed'); 
-            
-            stDiv.innerHTML = `
-                <div class="live-route-card__dot"></div>
-                <div class="live-route-card__name">${station}</div>
+        // Intermediate stations
+        segment.intermediateStations.forEach((s, i) => {
+            stationsHtml += `
+                <div class="segment__station segment__station--intermediate" data-index="${i + 1}">
+                    │ <span class="live-station-name">${formatStation(s)}</span>
+                </div>
             `;
-            list.appendChild(stDiv);
         });
 
-        card.appendChild(list);
-        return card;
+        // Deboard station
+        const lastIndex = segment.stations.length - 1;
+        stationsHtml += `
+            <div class="segment__station segment__station--deboard" data-index="${lastIndex}">
+                <span class="live-station-name">Deboard at ${formatStation(segment.deboardAt)}</span>
+                <span class="segment__station-platform">${segment.stops} stop${segment.stops !== 1 ? 's' : ''} · ~${segment.estimatedMinutes} min</span>
+            </div>
+        `;
+
+        div.innerHTML = `
+            <div class="segment__header" style="justify-content: space-between;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span class="segment__line-badge" style="background:${segment.color}">
+                        ${segment.line}
+                    </span>
+                    <span class="segment__direction">${segment.directionLabel}</span>
+                </div>
+                <span class="live-route-card__gps-status" id="gps-status-indicator">📡 Locating...</span>
+            </div>
+            <div class="segment__stations">
+                ${stationsHtml}
+            </div>
+        `;
+
+        return div;
+    }
+
+    function formatStation(name) {
+        // Simple HTML escape
+        const div = document.createElement('div');
+        div.textContent = name;
+        return div.innerHTML;
     }
 
     function markStationPassedInLiveCard(index) {
         if (!currentLiveCard) return;
-        const stations = currentLiveCard.querySelectorAll('.live-route-card__station');
-        stations.forEach((st, i) => {
-            st.classList.remove('current');
-            if (i < index) st.classList.add('passed');
-            if (i === index) st.classList.add('current');
+        const stations = currentLiveCard.querySelectorAll('.segment__station');
+        stations.forEach((st) => {
+            const stIdx = parseInt(st.dataset.index);
+            st.classList.remove('segment__station--current');
+            
+            if (stIdx < index) {
+                st.classList.add('segment__station--passed');
+            } else if (stIdx === index) {
+                st.classList.add('segment__station--current');
+            }
         });
         
         const currentSt = stations[index];
