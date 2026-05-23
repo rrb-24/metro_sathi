@@ -341,9 +341,14 @@ const Chat = (() => {
 
         // Proceed to next state if provided
         if (nextState) {
-            setTimeout(() => {
+            if (nextState === STATES.JOURNEY) {
+                // Synchronous transition to preserve user gesture for GPS prompt
                 transitionTo(nextState);
-            }, 600);
+            } else {
+                setTimeout(() => {
+                    transitionTo(nextState);
+                }, 600);
+            }
         }
     }
 

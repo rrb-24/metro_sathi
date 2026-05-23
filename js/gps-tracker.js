@@ -3,7 +3,7 @@
  * Handles live location tracking, distance calculations, and station proximity logic.
  */
 
-const GPSTracker = (() => {
+window.GPSTracker = (() => {
     let watchId = null;
     let isTracking = false;
     
