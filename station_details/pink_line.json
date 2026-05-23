@@ -50,6 +50,27 @@
         }
     },
 
+    "coordinates": {
+        "Kalena Agrahara": { "lat": 12.8818, "lng": 77.5970 },
+        "Hulimavu": { "lat": 12.8880, "lng": 77.5997 },
+        "I.I.M.B": { "lat": 12.8963, "lng": 77.5997 },
+        "J.P. Nagar 4th Phase": { "lat": 12.9053, "lng": 77.5979 },
+        "Jayadeva Hospital": { "lat": 12.9177, "lng": 77.5989 },
+        "Tavarekere": { "lat": 12.9245, "lng": 77.5995 },
+        "Dairy Circle": { "lat": 12.9340, "lng": 77.5975 },
+        "Lakkasandra": { "lat": 12.9420, "lng": 77.5985 },
+        "Langford Town": { "lat": 12.9500, "lng": 77.5975 },
+        "Rashtriya Military School": { "lat": 12.9585, "lng": 77.5990 },
+        "Mahatma Gandhi Road": { "lat": 12.9756, "lng": 77.6065 },
+        "Shivajinagar": { "lat": 12.9850, "lng": 77.6050 },
+        "Cantonment": { "lat": 12.9927, "lng": 77.5976 },
+        "Pottery Town": { "lat": 12.9988, "lng": 77.6005 },
+        "Tannery Road": { "lat": 13.0050, "lng": 77.6020 },
+        "Venkateshpura": { "lat": 13.0100, "lng": 77.6050 },
+        "Kadugondanahalli": { "lat": 13.0150, "lng": 77.6095 },
+        "Nagawara": { "lat": 13.0228, "lng": 77.6130 }
+    },
+
     "interchanges": {
         "Mahatma Gandhi Road": ["PURPLE"],
         "Jayadeva Hospital": ["YELLOW"],

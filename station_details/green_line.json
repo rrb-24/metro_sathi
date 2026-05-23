@@ -2,12 +2,10 @@
     "is_active": true,
     "line_name": "GREEN",
     "color": "#4CAF50",
-
     "terminals": {
         "start": "Madavara",
         "end": "Silk Institute"
     },
-
     "stations": [
         "Madavara",
         "Chikkabidarakallu",
@@ -42,7 +40,6 @@
         "Thalaghattapura",
         "Silk Institute"
     ],
-
     "platforms": {
         "default": {
             "towards_start": 1,
@@ -59,9 +56,142 @@
             }
         }
     },
-
+    "coordinates": {
+        "Madavara": {
+            "lat": 13.057435,
+            "lng": 77.472905
+        },
+        "Chikkabidarakallu": {
+            "lat": 13.052417,
+            "lng": 77.487894
+        },
+        "Manjunathanagara": {
+            "lat": 13.050155,
+            "lng": 77.494377
+        },
+        "Nagasandra": {
+            "lat": 13.0481133,
+            "lng": 77.5001231
+        },
+        "Dasarahalli": {
+            "lat": 13.0435419,
+            "lng": 77.5123791
+        },
+        "Jalahalli": {
+            "lat": 13.0395842,
+            "lng": 77.5198378
+        },
+        "Peenya Industry": {
+            "lat": 13.0364479,
+            "lng": 77.5254516
+        },
+        "Peenya": {
+            "lat": 13.0329869,
+            "lng": 77.5334691
+        },
+        "Goraguntepalya": {
+            "lat": 13.028486,
+            "lng": 77.5408673
+        },
+        "Yeshwanthpur": {
+            "lat": 13.0233093,
+            "lng": 77.5498636
+        },
+        "Sandal Soap Factory": {
+            "lat": 13.0147286,
+            "lng": 77.5540309
+        },
+        "Mahalakshmi": {
+            "lat": 13.0083376,
+            "lng": 77.5488342
+        },
+        "Rajajinagara": {
+            "lat": 13.0003458,
+            "lng": 77.5497483
+        },
+        "Mahakavi Kuvempu Road": {
+            "lat": 12.9985023,
+            "lng": 77.5569472
+        },
+        "Srirampura": {
+            "lat": 12.9965258,
+            "lng": 77.5633563
+        },
+        "Mantri Square Sampige Road": {
+            "lat": 12.9905452,
+            "lng": 77.5708049
+        },
+        "Nadaprabhu Kempegowda Station, Majestic": {
+            "lat": 12.975692,
+            "lng": 77.572844
+        },
+        "Chikkapete": {
+            "lat": 12.9675461,
+            "lng": 77.5747925
+        },
+        "Krishna Rajendra Market": {
+            "lat": 12.960161,
+            "lng": 77.574479
+        },
+        "National College": {
+            "lat": 12.9506135,
+            "lng": 77.5737362
+        },
+        "Lalbagh": {
+            "lat": 12.946287,
+            "lng": 77.5800611
+        },
+        "South End Circle": {
+            "lat": 12.9383208,
+            "lng": 77.5800748
+        },
+        "Jayanagar": {
+            "lat": 12.9296749,
+            "lng": 77.5801753
+        },
+        "Rashtreeya Vidyalaya Road": {
+            "lat": 12.9215877,
+            "lng": 77.5802611
+        },
+        "Banashankari": {
+            "lat": 12.9155385,
+            "lng": 77.5736288
+        },
+        "Jayaprakash Nagar": {
+            "lat": 12.9075563,
+            "lng": 77.573061
+        },
+        "Yelachenahalli": {
+            "lat": 12.8960529,
+            "lng": 77.5701606
+        },
+        "Konanakunte Cross": {
+            "lat": 12.888909,
+            "lng": 77.56278
+        },
+        "Doddakallasandra": {
+            "lat": 12.884636,
+            "lng": 77.552824
+        },
+        "Vajarahalli": {
+            "lat": 12.877485,
+            "lng": 77.544817
+        },
+        "Thalaghattapura": {
+            "lat": 12.871366,
+            "lng": 77.538439
+        },
+        "Silk Institute": {
+            "lat": 12.861672,
+            "lng": 77.529981
+        }
+    },
     "interchanges": {
-        "Nadaprabhu Kempegowda Station, Majestic": ["PURPLE"],
-        "Rashtreeya Vidyalaya Road": ["YELLOW"]
+        "Nadaprabhu Kempegowda Station, Majestic": [
+            "PURPLE"
+        ],
+        "Rashtreeya Vidyalaya Road": [
+            "YELLOW"
+        ]
     }
 }

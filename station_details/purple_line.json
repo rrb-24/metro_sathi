@@ -2,12 +2,10 @@
     "is_active": true,
     "line_name": "PURPLE",
     "color": "#9C27B0",
-
     "terminals": {
         "start": "Whitefield (Kadugodi)",
         "end": "Challaghatta"
     },
-
     "stations": [
         "Whitefield (Kadugodi)",
         "Hopefarm Channasandra",
@@ -47,7 +45,6 @@
         "Kengeri",
         "Challaghatta"
     ],
-
     "platforms": {
         "default": {
             "towards_start": 1,
@@ -68,10 +65,165 @@
             }
         }
     },
-
+    "coordinates": {
+        "Whitefield (Kadugodi)": {
+            "lat": 12.995626,
+            "lng": 77.757805
+        },
+        "Hopefarm Channasandra": {
+            "lat": 12.987348,
+            "lng": 77.753796
+        },
+        "Kadugodi Tree Park": {
+            "lat": 12.985711,
+            "lng": 77.746842
+        },
+        "Pattandur Agrahara": {
+            "lat": 12.987622,
+            "lng": 77.737737
+        },
+        "Sri Sathya Sai Hospital": {
+            "lat": 12.9810264,
+            "lng": 77.7276147
+        },
+        "Nallurhalli": {
+            "lat": 12.976632,
+            "lng": 77.724752
+        },
+        "Kundalahalli": {
+            "lat": 12.977607,
+            "lng": 77.715523
+        },
+        "Seetharama Palya": {
+            "lat": 12.980966,
+            "lng": 77.708713
+        },
+        "Hoodi": {
+            "lat": 12.988782,
+            "lng": 77.711364
+        },
+        "Garudacharpalya": {
+            "lat": 12.9934865,
+            "lng": 77.7036972
+        },
+        "Singayyanapalya": {
+            "lat": 12.996557,
+            "lng": 77.692708
+        },
+        "Krishnarajapura (K.R.Pura)": {
+            "lat": 12.9999248,
+            "lng": 77.677604
+        },
+        "Benniganahalli": {
+            "lat": 12.9963737,
+            "lng": 77.6682628
+        },
+        "Baiyappanahalli": {
+            "lat": 12.9906677,
+            "lng": 77.6525905
+        },
+        "Swami Vivekananda Road": {
+            "lat": 12.9859106,
+            "lng": 77.645004
+        },
+        "Indiranagar": {
+            "lat": 12.9782619,
+            "lng": 77.6385257
+        },
+        "Halasuru": {
+            "lat": 12.9763635,
+            "lng": 77.626715
+        },
+        "Trinity": {
+            "lat": 12.97303,
+            "lng": 77.6168395
+        },
+        "Mahatma Gandhi Road": {
+            "lat": 12.9755162,
+            "lng": 77.6066919
+        },
+        "Cubbon Park": {
+            "lat": 12.9809008,
+            "lng": 77.5974654
+        },
+        "Dr. B. R. Ambedkar Station, Vidhana Soudha": {
+            "lat": 12.9796925,
+            "lng": 77.5926343
+        },
+        "Sir M. Visvesvaraya Station, Central College": {
+            "lat": 12.9742805,
+            "lng": 77.5839458
+        },
+        "Nadaprabhu Kempegowda Station, Majestic": {
+            "lat": 12.975692,
+            "lng": 77.572844
+        },
+        "Krantivira Sangolli Rayanna Railway Station": {
+            "lat": 12.9758403,
+            "lng": 77.5657561
+        },
+        "Magadi Road": {
+            "lat": 12.9756582,
+            "lng": 77.5554115
+        },
+        "Sri Balagangadharanatha Swamiji Station, Hosahalli": {
+            "lat": 12.9742975,
+            "lng": 77.5454436
+        },
+        "Vijayanagar": {
+            "lat": 12.9708197,
+            "lng": 77.5373638
+        },
+        "Attiguppe": {
+            "lat": 12.9621018,
+            "lng": 77.5337131
+        },
+        "Deepanjali Nagar": {
+            "lat": 12.952215,
+            "lng": 77.5371013
+        },
+        "Mysuru Road": {
+            "lat": 12.9467268,
+            "lng": 77.5300739
+        },
+        "Nayandahalli": {
+            "lat": 12.941826,
+            "lng": 77.525164
+        },
+        "Rajarajeshwari Nagar": {
+            "lat": 12.936693,
+            "lng": 77.519556
+        },
+        "Jnanabharathi": {
+            "lat": 12.935446,
+            "lng": 77.512178
+        },
+        "Pattanagere": {
+            "lat": 12.924276,
+            "lng": 77.498305
+        },
+        "Kengeri Bus Terminal": {
+            "lat": 12.914642,
+            "lng": 77.487704
+        },
+        "Kengeri": {
+            "lat": 12.907912,
+            "lng": 77.47647
+        },
+        "Challaghatta": {
+            "lat": 12.897336,
+            "lng": 77.461214
+        }
+    },
     "interchanges": {
-        "Nadaprabhu Kempegowda Station, Majestic": ["GREEN"],
-        "Krishnarajapura (K.R.Pura)": ["BLUE"],
-        "Mahatma Gandhi Road": ["PINK"]
+        "Nadaprabhu Kempegowda Station, Majestic": [
+            "GREEN"
+        ],
+        "Krishnarajapura (K.R.Pura)": [
+            "BLUE"
+        ],
+        "Mahatma Gandhi Road": [
+            "PINK"
+        ]
     }
 }

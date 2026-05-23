@@ -8,6 +8,7 @@ const Chat = (() => {
     let fromStation = '';
     let toStation = '';
     let currentSegmentIndex = 0;
+    let currentLiveCard = null;
     
     // DOM Elements
     let chatView, messagesContainer, optionsContainer;
@@ -121,28 +122,29 @@ const Chat = (() => {
 
                 addBotMessage(`It is **${segment.stops} stop${segment.stops !== 1 ? 's' : ''}** away and will take about **${segment.estimatedMinutes} minutes**.`);
                 
-                setTimeout(() => {
-                    if (!isFinalSegment) {
-                        addBotMessage(`Please deboard the train when you arrive at **${segment.deboardAt}**.`);
-                    }
-                    addBotMessage(`Have you reached **${segment.deboardAt}** and stepped off the train?`);
-                    setOptions([
-                        { text: 'Yes, I have deboarded', action: () => {
-                            handleUserReply('Yes, I have deboarded');
-                            // Check if there's another segment
-                            if (currentSegmentIndex < routeData.segments.length - 1) {
-                                currentSegmentIndex++;
-                                transitionTo(STATES.BOARDING); // It handles interchange inherently
-                            } else {
-                                transitionTo(STATES.DESTINATION);
-                            }
-                        }},
-                        { text: 'No, still riding', action: () => {
-                            handleUserReply('No, still riding');
-                            addBotMessage(`Relax and enjoy the ride! Just tap the button when you step off at **${segment.deboardAt}**.`);
+                // Add the live route card
+                currentLiveCard = createLiveRouteCard(segment);
+                messagesContainer.appendChild(currentLiveCard);
+                scrollToBottom();
+
+                // Start GPS tracking
+                if (window.GPSTracker) {
+                    GPSTracker.start(segment.stations, segment.line, {
+                        onPositionUpdate: (pos) => {
+                            updateLiveCardGPSIndicator(pos.accuracy);
+                        },
+                        onStationPassed: (stationName, index) => {
+                            markStationPassedInLiveCard(index);
+                        },
+                        onApproachingDeboard: (stationName) => {
+                            addBotMessage(`📢 Get ready! Your stop **${stationName}** is next. Please move towards the doors.`);
+                        },
+                        onArrived: (stationName) => {
+                            addBotMessage(`🚉 You have arrived at **${stationName}**. Please deboard now.`);
                             setOptions([
-                                { text: 'I have deboarded now', action: () => {
-                                    handleUserReply('I have deboarded now');
+                                { text: 'I have deboarded', action: () => {
+                                    handleUserReply('I have deboarded');
+                                    if (window.GPSTracker) GPSTracker.stop();
                                     if (currentSegmentIndex < routeData.segments.length - 1) {
                                         currentSegmentIndex++;
                                         transitionTo(STATES.BOARDING);
@@ -151,9 +153,24 @@ const Chat = (() => {
                                     }
                                 }}
                             ]);
-                        }}
-                    ]);
-                }, 1000);
+                        },
+                        onGPSLost: () => {
+                            addBotMessage(`📡 GPS signal lost (likely underground). I'll estimate your position based on timing.`);
+                            updateLiveCardGPSIndicator('lost');
+                        },
+                        onGPSRestored: () => {
+                            updateLiveCardGPSIndicator('restored');
+                        },
+                        onError: (msg) => {
+                            // Fallback to manual flow
+                            addBotMessage(`Could not track location: ${msg}. Let me know when you arrive.`);
+                            showManualDeboardOptions(segment.deboardAt, isFinalSegment);
+                        }
+                    });
+                } else {
+                    // Fallback
+                    showManualDeboardOptions(segment.deboardAt, isFinalSegment);
+                }
                 break;
 
             case STATES.DESTINATION:
@@ -171,6 +188,108 @@ const Chat = (() => {
     /**
      * UI Helpers
      */
+    function showManualDeboardOptions(deboardAt, isFinalSegment) {
+        setTimeout(() => {
+            if (!isFinalSegment) {
+                addBotMessage(`Please deboard the train when you arrive at **${deboardAt}**.`);
+            }
+            addBotMessage(`Have you reached **${deboardAt}** and stepped off the train?`);
+            setOptions([
+                { text: 'Yes, I have deboarded', action: () => {
+                    handleUserReply('Yes, I have deboarded');
+                    if (window.GPSTracker) GPSTracker.stop();
+                    if (currentSegmentIndex < routeData.segments.length - 1) {
+                        currentSegmentIndex++;
+                        transitionTo(STATES.BOARDING);
+                    } else {
+                        transitionTo(STATES.DESTINATION);
+                    }
+                }},
+                { text: 'No, still riding', action: () => {
+                    handleUserReply('No, still riding');
+                    addBotMessage(`Relax and enjoy the ride! Just tap the button when you step off at **${deboardAt}**.`);
+                    setOptions([
+                        { text: 'I have deboarded now', action: () => {
+                            handleUserReply('I have deboarded now');
+                            if (window.GPSTracker) GPSTracker.stop();
+                            if (currentSegmentIndex < routeData.segments.length - 1) {
+                                currentSegmentIndex++;
+                                transitionTo(STATES.BOARDING);
+                            } else {
+                                transitionTo(STATES.DESTINATION);
+                            }
+                        }}
+                    ]);
+                }}
+            ]);
+        }, 1000);
+    }
+
+    function createLiveRouteCard(segment) {
+        const card = document.createElement('div');
+        card.className = 'live-route-card';
+        card.style.borderLeftColor = segment.color;
+
+        const header = document.createElement('div');
+        header.className = 'live-route-card__header';
+        header.innerHTML = `
+            <span class="live-route-card__line-name" style="background-color: ${segment.color}">${segment.line} Line</span>
+            <span class="live-route-card__gps-status" id="gps-status-indicator">📡 Locating...</span>
+        `;
+        card.appendChild(header);
+
+        const list = document.createElement('div');
+        list.className = 'live-route-card__stations';
+        list.id = 'live-card-stations';
+
+        segment.stations.forEach((station, index) => {
+            const stDiv = document.createElement('div');
+            stDiv.className = 'live-route-card__station';
+            if (index === 0) stDiv.classList.add('passed'); 
+            
+            stDiv.innerHTML = `
+                <div class="live-route-card__dot"></div>
+                <div class="live-route-card__name">${station}</div>
+            `;
+            list.appendChild(stDiv);
+        });
+
+        card.appendChild(list);
+        return card;
+    }
+
+    function markStationPassedInLiveCard(index) {
+        if (!currentLiveCard) return;
+        const stations = currentLiveCard.querySelectorAll('.live-route-card__station');
+        stations.forEach((st, i) => {
+            st.classList.remove('current');
+            if (i < index) st.classList.add('passed');
+            if (i === index) st.classList.add('current');
+        });
+        
+        const currentSt = stations[index];
+        if (currentSt) {
+            currentSt.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    function updateLiveCardGPSIndicator(status) {
+        if (!currentLiveCard) return;
+        const ind = currentLiveCard.querySelector('#gps-status-indicator');
+        if (!ind) return;
+
+        if (status === 'lost') {
+            ind.innerHTML = '⏱️ Estimating...';
+            ind.style.color = '#FF9800';
+        } else if (status === 'restored') {
+            ind.innerHTML = '📍 Live tracking';
+            ind.style.color = '#4CAF50';
+        } else if (typeof status === 'number') {
+            ind.innerHTML = '📍 Live tracking';
+            ind.style.color = '#4CAF50';
+        }
+    }
+
     function addBotMessage(text) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'chat-msg chat-msg--bot';
@@ -222,6 +341,7 @@ const Chat = (() => {
      * View Toggles
      */
     function closeChat() {
+        if (window.GPSTracker) GPSTracker.stop();
         chatView.classList.remove('active');
         chatView.classList.add('hidden');
         routeResultsView.classList.remove('active');

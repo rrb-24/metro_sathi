@@ -230,6 +230,18 @@ const MetroData = (() => {
     }
 
     /**
+     * Get coordinates for a station on a specific line.
+     * @param {string} lineName 
+     * @param {string} stationName 
+     * @returns {{lat: number, lng: number}|null}
+     */
+    function getStationCoordinates(lineName, stationName) {
+        const line = lines[lineName];
+        if (!line || !line.coordinates || !line.coordinates[stationName]) return null;
+        return line.coordinates[stationName];
+    }
+
+    /**
      * Get all lines.
      */
     function getAllLines() {
@@ -263,6 +275,7 @@ const MetroData = (() => {
         getAllLines,
         getStationIndex,
         getStationLines,
+        getStationCoordinates,
         makeNodeKey,
         parseNodeKey,
         get graph() { return graph; },
