@@ -359,7 +359,9 @@ const Chat = (() => {
     }
 
     function scrollToBottom() {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        setTimeout(() => {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 50);
     }
 
     function formatText(text) {
