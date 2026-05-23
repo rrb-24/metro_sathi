@@ -83,7 +83,7 @@ const Chat = (() => {
                         { text: 'Yes, I have it', action: () => handleUserReply('Yes, I have it', STATES.BOARDING) },
                         { text: 'No, not yet', action: () => {
                             handleUserReply('No, not yet');
-                            addBotMessage(`Okay, please navigate to the ticket counter and get a ticket to **${toStation}**.`);
+                            addBotMessage(`Okay! You can navigate to the ticket counter to get a ticket to **${toStation}**.<br><br>💡 **Pro Tip:** Skip the queue and get a 5% discount by buying a QR ticket instantly on WhatsApp. <a href="https://wa.me/918105556677?text=Hi" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: underline;">Click here to open Namma Metro WhatsApp</a>`);
                             setOptions([
                                 { text: 'I have purchased the ticket now', action: () => handleUserReply('I have purchased the ticket now', STATES.BOARDING) }
                             ]);
