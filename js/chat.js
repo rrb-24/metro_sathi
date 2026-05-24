@@ -1,6 +1,9 @@
 /**
  * Metro Sathi — Chat Controller
  * Manages the interactive step-by-step route guidance.
+/**
+ * Metro Sathi — Chat Controller
+ * Manages the interactive step-by-step route guidance.
  */
 
 const Chat = (() => {
@@ -9,6 +12,7 @@ const Chat = (() => {
     let toStation = '';
     let currentSegmentIndex = 0;
     let currentLiveCard = null;
+    let currentView = 'chat';
     
     // DOM Elements
     let chatView, messagesContainer, optionsContainer;
@@ -23,6 +27,141 @@ const Chat = (() => {
     };
     
     let currentState = null;
+
+    /**
+     * Session Persistence
+     */
+    function saveSession() {
+        if (!routeData) return;
+        const session = {
+            routeData,
+            fromStation,
+            toStation,
+            currentSegmentIndex,
+            currentState,
+            chatHTML: messagesContainer.innerHTML,
+            gpsIndex: window.GPSTracker && window.GPSTracker.isTracking() ? window.GPSTracker.getCurrentIndex() : 0,
+            currentView: currentView
+        };
+        sessionStorage.setItem('metroSathiSession', JSON.stringify(session));
+    }
+
+    function clearSession() {
+        sessionStorage.removeItem('metroSathiSession');
+    }
+
+    function restoreSession(session) {
+        if (!chatView) init();
+        
+        routeData = session.routeData;
+        fromStation = session.fromStation;
+        toStation = session.toStation;
+        currentSegmentIndex = session.currentSegmentIndex;
+        currentState = session.currentState;
+        
+        messagesContainer.innerHTML = session.chatHTML;
+        currentLiveCard = messagesContainer.querySelector('.live-route-card');
+        currentView = session.currentView || 'chat';
+        
+        document.querySelector('.search-panel').classList.add('hidden');
+        
+        if (currentView === 'route') {
+            chatView.classList.remove('active');
+            chatView.classList.add('hidden');
+            routeResultsView.classList.remove('hidden');
+            routeResultsView.classList.add('active');
+        } else {
+            routeResultsView.classList.remove('active');
+            routeResultsView.classList.add('hidden');
+            chatView.classList.remove('hidden');
+            chatView.classList.add('active');
+        }
+        
+        if (typeof UI !== 'undefined' && UI.renderRoute) {
+            UI.renderRoute(session.routeData);
+        }
+        
+        scrollToBottom();
+        resumeStateLogic(session.gpsIndex);
+    }
+
+    function resumeStateLogic(gpsIndex) {
+        if (!routeData || !routeData.segments[currentSegmentIndex]) return;
+        const segment = routeData.segments[currentSegmentIndex];
+        const isFinalSegment = currentSegmentIndex === routeData.segments.length - 1;
+        
+        switch (currentState) {
+            case STATES.TICKET_CHECK:
+                setOptions([
+                    { text: 'Yes, I have it', action: () => handleUserReply('Yes, I have it', STATES.BOARDING) },
+                    { text: 'No, not yet', action: () => {
+                        handleUserReply('No, not yet');
+                        addBotMessage(`Okay! You can navigate to the ticket counter to get a ticket to **${toStation}**.<br><br>💡 **Pro Tip:** Skip the queue and get a 5% discount by buying a QR ticket instantly on WhatsApp. <a href="https://wa.me/918105556677?text=Hi" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: underline;">Click here to open Namma Metro WhatsApp</a>`);
+                        setOptions([
+                            { text: 'I have purchased the ticket now', action: () => handleUserReply('I have purchased the ticket now', STATES.BOARDING) }
+                        ]);
+                    }}
+                ]);
+                break;
+            case STATES.BOARDING:
+                setOptions([
+                    { text: 'Yes, I am on the train', action: () => handleUserReply('Yes, I am on the train', STATES.JOURNEY) },
+                    { text: 'No, waiting for it', action: () => {
+                        handleUserReply('No, waiting for it');
+                        addBotMessage(`No problem. Please wait safely at the platform. Let me know when you board.`);
+                        setOptions([
+                            { text: 'I have boarded', action: () => handleUserReply('I have boarded', STATES.JOURNEY) }
+                        ]);
+                    }}
+                ]);
+                break;
+            case STATES.JOURNEY:
+                if (window.GPSTracker) {
+                    GPSTracker.start(segment.stations, segment.line, {
+                        onPositionUpdate: (pos) => {
+                            updateLiveCardGPSIndicator(pos.accuracy);
+                        },
+                        onStationPassed: (stationName, index) => {
+                            markStationPassedInLiveCard(index);
+                        },
+                        onApproachingDeboard: (stationName) => {
+                            addBotMessage(`🔔 Get ready! Your stop **${stationName}** is next. Please move towards the doors.`);
+                        },
+                        onArrived: (stationName) => {
+                            addBotMessage(`🚉 You have arrived at **${stationName}**. Please deboard now.`);
+                            setOptions([
+                                { text: 'I have deboarded', action: () => {
+                                    handleUserReply('I have deboarded');
+                                    if (window.GPSTracker) GPSTracker.stop();
+                                    if (currentSegmentIndex < routeData.segments.length - 1) {
+                                        currentSegmentIndex++;
+                                        transitionTo(STATES.BOARDING);
+                                    } else {
+                                        transitionTo(STATES.DESTINATION);
+                                    }
+                                }}
+                            ]);
+                        },
+                        onError: (msg) => {
+                            addBotMessage(`Could not track location: ${msg}. Let me know when you arrive.`);
+                            showManualDeboardOptions(segment.deboardAt, isFinalSegment);
+                        }
+                    }, gpsIndex);
+                } else {
+                    showManualDeboardOptions(segment.deboardAt, isFinalSegment);
+                }
+                break;
+            case STATES.DESTINATION:
+                setOptions([
+                    { text: 'Plan another journey', action: () => {
+                        handleUserReply('Plan another journey');
+                        closeChat();
+                    }}
+                ]);
+                break;
+        }
+    }
+
 
     function init() {
         chatView = document.getElementById('chat-view');
@@ -326,6 +465,7 @@ const Chat = (() => {
         msgDiv.innerHTML = `<div class="chat-msg__bubble">${formatText(text)}</div>`;
         messagesContainer.appendChild(msgDiv);
         scrollToBottom();
+        saveSession();
     }
 
     function handleUserReply(text, nextState = null) {
@@ -338,6 +478,7 @@ const Chat = (() => {
         msgDiv.innerHTML = `<div class="chat-msg__bubble">${formatText(text)}</div>`;
         messagesContainer.appendChild(msgDiv);
         scrollToBottom();
+        saveSession();
 
         // Proceed to next state if provided
         if (nextState) {
@@ -361,6 +502,7 @@ const Chat = (() => {
             btn.addEventListener('click', opt.action);
             optionsContainer.appendChild(btn);
         });
+        saveSession();
     }
 
     function scrollToBottom() {
@@ -378,6 +520,7 @@ const Chat = (() => {
      * View Toggles
      */
     function closeChat() {
+        clearSession();
         if (window.GPSTracker) GPSTracker.stop();
         chatView.classList.remove('active');
         chatView.classList.add('hidden');
@@ -389,20 +532,25 @@ const Chat = (() => {
     }
 
     function showFullRoute() {
+        currentView = 'route';
         chatView.classList.remove('active');
         chatView.classList.add('hidden');
         routeResultsView.classList.remove('hidden');
         routeResultsView.classList.add('active');
+        saveSession();
     }
 
     function backToChatFromRoute() {
+        currentView = 'chat';
         routeResultsView.classList.remove('active');
         routeResultsView.classList.add('hidden');
         chatView.classList.remove('hidden');
         chatView.classList.add('active');
+        saveSession();
     }
 
     return {
+        restoreSession,
         startChat
     };
 })();

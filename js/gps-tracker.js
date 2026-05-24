@@ -36,8 +36,9 @@ window.GPSTracker = (() => {
      * @param {Array} segmentStations - Array of station names in order of travel
      * @param {string} lineName - The name of the metro line
      * @param {Object} cbs - Callback functions
+     * @param {number} startIndex - Optional station index to resume from
      */
-    function start(segmentStations, lineName, cbs) {
+    function start(segmentStations, lineName, cbs, startIndex = 0) {
         if (!navigator.geolocation) {
             if (cbs.onError) cbs.onError("Geolocation is not supported by your browser.");
             return;
@@ -56,7 +57,7 @@ window.GPSTracker = (() => {
             };
         });
         
-        currentIndex = 0;
+        currentIndex = startIndex;
         deboardIndex = currentSegmentStations.length - 1;
         isTracking = true;
 
@@ -204,6 +205,7 @@ window.GPSTracker = (() => {
     return {
         start,
         stop,
-        isTracking: () => isTracking
+        isTracking: () => isTracking,
+        getCurrentIndex: () => currentIndex
     };
 })();

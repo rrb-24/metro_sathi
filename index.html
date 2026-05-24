@@ -137,6 +137,19 @@
             try {
                 await MetroData.load();
                 UI.init();
+                
+                // Restore session if exists
+                const savedSession = sessionStorage.getItem('metroSathiSession');
+                if (savedSession) {
+                    try {
+                        const session = JSON.parse(savedSession);
+                        Chat.restoreSession(session);
+                    } catch (e) {
+                        console.error('Failed to restore session:', e);
+                        sessionStorage.removeItem('metroSathiSession');
+                    }
+                }
+                
                 console.log('Metro Sathi loaded successfully!');
                 console.log(`Loaded ${MetroData.allStationNames.length} stations across ${Object.keys(MetroData.getAllLines()).length} lines`);
             } catch (err) {

@@ -502,6 +502,7 @@ const UI = (() => {
     // Public API
     return {
         init,
-        toggleExpand
+        toggleExpand,
+        renderRoute
     };
 })();
