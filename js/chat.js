@@ -50,8 +50,11 @@ const Chat = (() => {
         sessionStorage.removeItem('metroSathiSession');
     }
 
+    let globalListenersBound = false;
+
     function restoreSession(session) {
-        if (!chatView) init();
+        init();
+        if (typeof UI !== 'undefined' && UI.toggleChatTheme) UI.toggleChatTheme(true);
         
         routeData = session.routeData;
         fromStation = session.fromStation;
@@ -59,22 +62,31 @@ const Chat = (() => {
         currentSegmentIndex = session.currentSegmentIndex;
         currentState = session.currentState;
         
-        messagesContainer.innerHTML = session.chatHTML;
-        currentLiveCard = messagesContainer.querySelector('.live-route-card');
+        if (messagesContainer) messagesContainer.innerHTML = session.chatHTML;
+        if (messagesContainer) currentLiveCard = messagesContainer.querySelector('.live-route-card');
         currentView = session.currentView || 'chat';
         
-        document.querySelector('.search-panel').classList.add('hidden');
+        if (searchPanel) searchPanel.classList.add('hidden');
+        if (lineLegend) lineLegend.classList.add('hidden');
         
         if (currentView === 'route') {
-            chatView.classList.remove('active');
-            chatView.classList.add('hidden');
-            routeResultsView.classList.remove('hidden');
-            routeResultsView.classList.add('active');
+            if (chatView) {
+                chatView.classList.remove('active');
+                chatView.classList.add('hidden');
+            }
+            if (routeResultsView) {
+                routeResultsView.classList.remove('hidden');
+                routeResultsView.classList.add('active');
+            }
         } else {
-            routeResultsView.classList.remove('active');
-            routeResultsView.classList.add('hidden');
-            chatView.classList.remove('hidden');
-            chatView.classList.add('active');
+            if (routeResultsView) {
+                routeResultsView.classList.remove('active');
+                routeResultsView.classList.add('hidden');
+            }
+            if (chatView) {
+                chatView.classList.remove('hidden');
+                chatView.classList.add('active');
+            }
         }
         
         if (typeof UI !== 'undefined' && UI.renderRoute) {
@@ -125,10 +137,10 @@ const Chat = (() => {
                             markStationPassedInLiveCard(index);
                         },
                         onApproachingDeboard: (stationName) => {
-                            addBotMessage(`🔔 Get ready! Your stop **${stationName}** is next. Please move towards the doors.`);
+                            addCampaignAlert('Get ready!', `Your stop **${stationName}** is next. Please move towards the doors.`, 'primary', 'campaign');
                         },
                         onArrived: (stationName) => {
-                            addBotMessage(`🚉 You have arrived at **${stationName}**. Please deboard now.`);
+                            addCampaignAlert('You have arrived!', `Welcome to **${stationName}**. Please deboard now.`, 'secondary', 'train');
                             setOptions([
                                 { text: 'I have deboarded', action: () => {
                                     handleUserReply('I have deboarded');
@@ -152,12 +164,9 @@ const Chat = (() => {
                 }
                 break;
             case STATES.DESTINATION:
-                setOptions([
-                    { text: 'Plan another journey', action: () => {
-                        handleUserReply('Plan another journey');
-                        closeChat();
-                    }}
-                ]);
+                if (optionsContainer) optionsContainer.innerHTML = '';
+                const compContainer = document.getElementById('chat-completion-container');
+                if (compContainer) compContainer.classList.remove('hidden');
                 break;
         }
     }
@@ -167,20 +176,42 @@ const Chat = (() => {
         chatView = document.getElementById('chat-view');
         messagesContainer = document.getElementById('chat-messages');
         optionsContainer = document.getElementById('chat-options');
-        searchPanel = document.querySelector('.search-panel');
+        searchPanel = document.getElementById('home-hero-and-search');
         lineLegend = document.querySelector('.line-legend');
         routeResultsView = document.getElementById('route-results');
         
-        document.getElementById('chat-back-btn').addEventListener('click', closeChat);
-        document.getElementById('chat-route-btn').addEventListener('click', showFullRoute);
-        document.getElementById('route-back-btn').addEventListener('click', backToChatFromRoute);
+        const backBtn = document.getElementById('chat-back-btn');
+        if (backBtn) backBtn.addEventListener('click', closeChat);
+        
+        const routeBtn = document.getElementById('chat-route-btn');
+        if (routeBtn) routeBtn.addEventListener('click', showFullRoute);
+        
+        const routeBackBtn = document.getElementById('route-back-btn');
+        if (routeBackBtn) {
+            routeBackBtn.addEventListener('click', backToChatFromRoute);
+        }
+
+        const completionBtn = document.getElementById('chat-completion-btn');
+        if (completionBtn) {
+            completionBtn.addEventListener('click', () => {
+                handleUserReply('Plan another journey');
+                closeChat();
+            });
+        }
+
+        // Global shell elements bound only once
+        if (!globalListenersBound) {
+            const headerBackBtn = document.getElementById('chat-header-back-btn');
+            if (headerBackBtn) headerBackBtn.addEventListener('click', closeChat);
+            globalListenersBound = true;
+        }
     }
 
     /**
      * Start a new chat session for a route.
      */
     function startChat(result, from, to) {
-        if (!chatView) init();
+        init();
 
         routeData = result;
         fromStation = from;
@@ -188,20 +219,35 @@ const Chat = (() => {
         currentSegmentIndex = 0;
 
         // Reset UI
-        messagesContainer.innerHTML = '';
-        optionsContainer.innerHTML = '';
+        if (messagesContainer) messagesContainer.innerHTML = '';
+        if (optionsContainer) optionsContainer.innerHTML = '';
         
+        // Hide completion container
+        const compContainer = document.getElementById('chat-completion-container');
+        if (compContainer) compContainer.classList.add('hidden');
+
         // Hide search, show chat
-        searchPanel.classList.add('hidden');
-        lineLegend.classList.add('hidden');
-        routeResultsView.classList.add('hidden');
-        routeResultsView.classList.remove('active');
+        if (searchPanel) searchPanel.classList.add('hidden');
+        if (lineLegend) lineLegend.classList.add('hidden');
+        if (routeResultsView) {
+            routeResultsView.classList.add('hidden');
+            routeResultsView.classList.remove('active');
+        }
         
-        chatView.classList.remove('hidden');
-        chatView.classList.add('active');
+        if (chatView) {
+            chatView.classList.remove('hidden');
+            chatView.classList.add('active');
+        }
+
+        if (typeof UI !== 'undefined' && UI.toggleChatTheme) UI.toggleChatTheme(true);
 
         // Start state machine
         transitionTo(STATES.TICKET_CHECK);
+
+        // Transition URL path to chat guide view
+        if (typeof Router !== 'undefined') {
+            Router.navigate('/chat-guide');
+        }
     }
 
     /**
@@ -276,10 +322,10 @@ const Chat = (() => {
                             markStationPassedInLiveCard(index);
                         },
                         onApproachingDeboard: (stationName) => {
-                            addBotMessage(`📢 Get ready! Your stop **${stationName}** is next. Please move towards the doors.`);
+                            addCampaignAlert('Get ready!', `Your stop **${stationName}** is next. Please move towards the doors.`, 'primary', 'campaign');
                         },
                         onArrived: (stationName) => {
-                            addBotMessage(`🚉 You have arrived at **${stationName}**. Please deboard now.`);
+                            addCampaignAlert('You have arrived!', `Welcome to **${stationName}**. Please deboard now.`, 'secondary', 'train');
                             setOptions([
                                 { text: 'I have deboarded', action: () => {
                                     handleUserReply('I have deboarded');
@@ -314,12 +360,9 @@ const Chat = (() => {
 
             case STATES.DESTINATION:
                 addBotMessage(`You have arrived at **${toStation}**. Have a wonderful day in Bengaluru!`);
-                setOptions([
-                    { text: 'Plan another journey', action: () => {
-                        handleUserReply('Plan another journey');
-                        closeChat();
-                    }}
-                ]);
+                optionsContainer.innerHTML = '';
+                const compContainer = document.getElementById('chat-completion-container');
+                if (compContainer) compContainer.classList.remove('hidden');
                 break;
         }
     }
@@ -364,51 +407,109 @@ const Chat = (() => {
         }, 1000);
     }
 
+    function getLineBgColorClass(line) {
+        const upper = line.toUpperCase();
+        if (upper.includes('GREEN')) return 'bg-secondary';
+        if (upper.includes('PURPLE')) return 'bg-primary';
+        if (upper.includes('YELLOW')) return 'bg-amber-600';
+        if (upper.includes('PINK')) return 'bg-pink-600';
+        if (upper.includes('BLUE')) return 'bg-blue-600';
+        return 'bg-slate-600';
+    }
+
+    function getLineFixedColorClass(line) {
+        const upper = line.toUpperCase();
+        if (upper.includes('GREEN')) return 'bg-secondary-fixed';
+        if (upper.includes('PURPLE')) return 'bg-primary-fixed';
+        if (upper.includes('YELLOW')) return 'bg-amber-100';
+        if (upper.includes('PINK')) return 'bg-pink-100';
+        if (upper.includes('BLUE')) return 'bg-blue-100';
+        return 'bg-slate-300';
+    }
+
+    function getLineBadgeClasses(line) {
+        const upper = line.toUpperCase();
+        if (upper.includes('GREEN')) {
+            return { bg: 'bg-secondary-container', text: 'text-on-secondary-container' };
+        }
+        if (upper.includes('PURPLE')) {
+            return { bg: 'bg-primary-container', text: 'text-on-primary-container' };
+        }
+        if (upper.includes('YELLOW')) {
+            return { bg: 'bg-amber-100', text: 'text-amber-800' };
+        }
+        if (upper.includes('PINK')) {
+            return { bg: 'bg-pink-100', text: 'text-pink-800' };
+        }
+        if (upper.includes('BLUE')) {
+            return { bg: 'bg-blue-100', text: 'text-blue-800' };
+        }
+        return { bg: 'bg-slate-100', text: 'text-slate-800' };
+    }
+
+    function getLineTextColorClass(line) {
+        const upper = line.toUpperCase();
+        if (upper.includes('GREEN')) return 'text-secondary';
+        if (upper.includes('PURPLE')) return 'text-primary';
+        if (upper.includes('YELLOW')) return 'text-amber-600';
+        if (upper.includes('PINK')) return 'text-pink-600';
+        if (upper.includes('BLUE')) return 'text-blue-600';
+        return 'text-slate-600';
+    }
+
     function createLiveRouteCard(segment) {
         const div = document.createElement('div');
-        div.className = 'route-segment live-route-card';
-        div.style.setProperty('--segment-color', segment.color);
-
+        div.className = 'chat-bubble-in flex flex-col items-start w-full md:max-w-[90%] live-route-card';
+        
         let stationsHtml = '';
-
-        // Board station
-        stationsHtml += `
-            <div class="segment__station segment__station--board" data-index="0">
-                <span class="live-station-name">Board at ${formatStation(segment.boardAt)}</span>
-                <span class="segment__station-platform">Platform ${segment.platform}</span>
-            </div>
-        `;
-
-        // Intermediate stations
-        segment.intermediateStations.forEach((s, i) => {
+        segment.stations.forEach((stationName, idx) => {
+            let initialOpacity = 'opacity-40';
+            let initialDesc = 'Scheduled';
+            if (idx === 0) {
+                initialOpacity = 'opacity-100';
+                initialDesc = 'Boarding';
+            }
+            
             stationsHtml += `
-                <div class="segment__station segment__station--intermediate" data-index="${i + 1}">
-                    │ <span class="live-station-name">${formatStation(s)}</span>
+                <div class="relative live-card-station ${initialOpacity}" data-index="${idx}">
+                    <span class="absolute -left-[26px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm z-10 station-dot bg-slate-300" style="transition: all 0.3s ease;"></span>
+                    <p class="font-label-md text-on-surface font-semibold">${formatStation(stationName)}</p>
+                    <p class="text-label-sm text-on-surface-variant station-desc">${initialDesc}</p>
                 </div>
             `;
         });
 
-        // Deboard station
-        const lastIndex = segment.stations.length - 1;
-        stationsHtml += `
-            <div class="segment__station segment__station--deboard" data-index="${lastIndex}">
-                <span class="live-station-name">Deboard at ${formatStation(segment.deboardAt)}</span>
-                <span class="segment__station-platform">${segment.stops} stop${segment.stops !== 1 ? 's' : ''} · ~${segment.estimatedMinutes} min</span>
-            </div>
-        `;
+        const badgeClasses = getLineBadgeClasses(segment.line);
+        const textColorClass = getLineTextColorClass(segment.line);
 
         div.innerHTML = `
-            <div class="segment__header" style="justify-content: space-between;">
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <span class="segment__line-badge" style="background:${segment.color}">
-                        ${segment.line}
-                    </span>
-                    <span class="segment__direction">${segment.directionLabel}</span>
+            <div class="bg-white rounded-xl border border-outline-variant p-6 shadow-sm w-full">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center gap-2">
+                        <span class="${badgeClasses.bg} ${badgeClasses.text} text-label-sm px-3 py-1 rounded-full font-bold">
+                            ${segment.line} LINE
+                        </span>
+                        <div class="flex items-center gap-1 ${textColorClass} text-label-sm font-bold">
+                            <span class="w-2 h-2 rounded-full pulse-indicator ${getLineBgColorClass(segment.line)}"></span>
+                            <span id="gps-status-indicator">📡 Locating...</span>
+                        </div>
+                    </div>
+                    <span class="text-on-surface-variant text-label-sm">Train: T-241</span>
                 </div>
-                <span class="live-route-card__gps-status" id="gps-status-indicator">📡 Locating...</span>
-            </div>
-            <div class="segment__stations">
-                ${stationsHtml}
+                <h2 class="text-headline-md font-headline-md text-on-surface mb-2">Heading to ${formatStation(segment.deboardAt)}</h2>
+                <p class="text-body-md text-on-surface-variant mb-6">${segment.stops} stop${segment.stops !== 1 ? 's' : ''} away • ~${segment.estimatedMinutes} minutes</p>
+                
+                <!-- Vertical Journey Line -->
+                <div class="relative pl-8">
+                    <!-- Gray background line -->
+                    <div class="absolute left-3 top-2 bottom-2 w-1.5 rounded-full opacity-20 ${getLineBgColorClass(segment.line)}"></div>
+                    <!-- Live progress line -->
+                    <div class="absolute left-3 top-2 w-1.5 rounded-full live-card-progress-line ${getLineBgColorClass(segment.line)}" style="height: 0%; transition: height 0.5s ease;"></div>
+                    
+                    <div class="flex flex-col gap-8">
+                        ${stationsHtml}
+                    </div>
+                </div>
             </div>
         `;
 
@@ -424,18 +525,52 @@ const Chat = (() => {
 
     function markStationPassedInLiveCard(index) {
         if (!currentLiveCard) return;
-        const stations = currentLiveCard.querySelectorAll('.segment__station');
+        const segment = routeData.segments[currentSegmentIndex];
+        if (!segment) return;
+        
+        const stations = currentLiveCard.querySelectorAll('.live-card-station');
         stations.forEach((st) => {
             const stIdx = parseInt(st.dataset.index);
-            st.classList.remove('segment__station--current');
+            const dot = st.querySelector('.station-dot');
+            const desc = st.querySelector('.station-desc');
+            
+            st.classList.remove('opacity-100', 'opacity-60', 'opacity-40');
             
             if (stIdx < index) {
-                st.classList.add('segment__station--passed');
+                // Departed station
+                st.classList.add('opacity-60');
+                if (dot) {
+                    dot.className = 'absolute -left-[26px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm z-10 station-dot ' + getLineBgColorClass(segment.line);
+                    dot.style.backgroundColor = ''; // clear inline style
+                }
+                if (desc) desc.textContent = 'Departed';
             } else if (stIdx === index) {
-                st.classList.add('segment__station--current');
+                // Current station
+                st.classList.add('opacity-100');
+                if (dot) {
+                    dot.className = 'absolute -left-[26px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm z-10 station-dot bounce-train ' + getLineBgColorClass(segment.line);
+                    dot.style.backgroundColor = ''; // clear inline style
+                }
+                if (desc) desc.textContent = 'Next Station';
+            } else {
+                // Upcoming station
+                st.classList.add('opacity-40');
+                if (dot) {
+                    dot.className = 'absolute -left-[26px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm z-10 station-dot bg-slate-300';
+                    dot.style.backgroundColor = ''; // clear inline style
+                }
+                if (desc) desc.textContent = 'Expected';
             }
         });
         
+        // Update progress line height
+        const progressLine = currentLiveCard.querySelector('.live-card-progress-line');
+        if (progressLine && stations.length > 1) {
+            const pct = (index / (stations.length - 1)) * 100;
+            progressLine.style.height = `${pct}%`;
+        }
+
+        // Scroll current station into view if needed
         const currentSt = stations[index];
         if (currentSt) {
             currentSt.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -446,23 +581,62 @@ const Chat = (() => {
         if (!currentLiveCard) return;
         const ind = currentLiveCard.querySelector('#gps-status-indicator');
         if (!ind) return;
+        
+        const segment = routeData.segments[currentSegmentIndex];
+        const textColorClass = segment ? getLineTextColorClass(segment.line) : 'text-secondary';
 
+        // Clear existing color classes
+        ind.className = '';
+        
         if (status === 'lost') {
             ind.innerHTML = '⏱️ Estimating...';
-            ind.style.color = '#FF9800';
-        } else if (status === 'restored') {
+            ind.className = 'text-amber-600';
+        } else {
             ind.innerHTML = '📍 Live tracking';
-            ind.style.color = '#4CAF50';
-        } else if (typeof status === 'number') {
-            ind.innerHTML = '📍 Live tracking';
-            ind.style.color = '#4CAF50';
+            ind.className = textColorClass;
         }
     }
 
     function addBotMessage(text) {
         const msgDiv = document.createElement('div');
-        msgDiv.className = 'chat-msg chat-msg--bot';
-        msgDiv.innerHTML = `<div class="chat-msg__bubble">${formatText(text)}</div>`;
+        msgDiv.className = 'chat-bubble-in flex flex-col items-start max-w-[85%] mb-2';
+        msgDiv.style.opacity = '1';
+        msgDiv.style.transform = 'translateY(0px)';
+        msgDiv.innerHTML = `
+            <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-outline-variant text-on-surface shadow-sm">
+                <p class="font-body-md text-body-md leading-relaxed">${formatText(text)}</p>
+            </div>
+        `;
+        messagesContainer.appendChild(msgDiv);
+        scrollToBottom();
+        saveSession();
+    }
+
+    function addCampaignAlert(title, text, type, iconName) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'chat-bubble-in flex flex-col items-start w-full max-w-[85%] mb-2';
+        msgDiv.style.opacity = '1';
+        msgDiv.style.transform = 'translateY(0px)';
+        
+        let borderClass = 'border-primary';
+        let bgClass = 'bg-surface-container-high';
+        let iconColor = 'text-primary';
+
+        if (type === 'secondary') {
+            borderClass = 'border-secondary';
+            bgClass = 'bg-secondary-container';
+            iconColor = 'text-secondary';
+        }
+        
+        msgDiv.innerHTML = `
+            <div class="${bgClass} border-l-4 ${borderClass} p-4 rounded-lg flex gap-4 items-start shadow-sm w-full">
+                <span class="material-symbols-outlined ${iconColor}" style="font-variation-settings: 'FILL' 1;">${iconName}</span>
+                <div>
+                    <p class="font-label-md text-on-surface font-semibold">${title}</p>
+                    <p class="text-body-md text-on-surface-variant">${formatText(text)}</p>
+                </div>
+            </div>
+        `;
         messagesContainer.appendChild(msgDiv);
         scrollToBottom();
         saveSession();
@@ -474,8 +648,17 @@ const Chat = (() => {
         
         // Add user message bubble
         const msgDiv = document.createElement('div');
-        msgDiv.className = 'chat-msg chat-msg--user';
-        msgDiv.innerHTML = `<div class="chat-msg__bubble">${formatText(text)}</div>`;
+        msgDiv.className = 'chat-bubble-out flex flex-col items-end self-end max-w-[85%] mb-2';
+        msgDiv.style.opacity = '1';
+        msgDiv.style.transform = 'translateY(0px)';
+        msgDiv.innerHTML = `
+            <div class="bg-primary p-4 rounded-2xl rounded-tr-none text-on-primary shadow-sm">
+                <p class="font-body-md text-body-md leading-relaxed">${formatText(text)}</p>
+            </div>
+            <span class="text-label-sm text-on-surface-variant mt-1 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">done_all</span> Delivered
+            </span>
+        `;
         messagesContainer.appendChild(msgDiv);
         scrollToBottom();
         saveSession();
@@ -497,8 +680,16 @@ const Chat = (() => {
         optionsContainer.innerHTML = '';
         options.forEach(opt => {
             const btn = document.createElement('button');
-            btn.className = 'chat-option-btn';
-            btn.textContent = opt.text;
+            if (opt.text === 'Plan another journey') {
+                btn.className = 'w-full bg-white hover:bg-surface-container border-2 border-primary text-primary py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-95 group font-headline-md text-headline-md shadow-sm';
+                btn.innerHTML = `
+                    <span class="material-symbols-outlined group-hover:rotate-180 transition-transform duration-500">refresh</span>
+                    <span>Plan another journey</span>
+                `;
+            } else {
+                btn.className = 'chat-option-btn';
+                btn.textContent = opt.text;
+            }
             btn.addEventListener('click', opt.action);
             optionsContainer.appendChild(btn);
         });
@@ -522,35 +713,42 @@ const Chat = (() => {
     function closeChat() {
         clearSession();
         if (window.GPSTracker) GPSTracker.stop();
-        chatView.classList.remove('active');
-        chatView.classList.add('hidden');
-        routeResultsView.classList.remove('active');
-        routeResultsView.classList.add('hidden');
+        if (typeof UI !== 'undefined' && UI.toggleChatTheme) UI.toggleChatTheme(false);
         
-        searchPanel.classList.remove('hidden');
-        lineLegend.classList.remove('hidden');
+        if (typeof Router !== 'undefined') {
+            Router.navigate('/home');
+        }
     }
 
     function showFullRoute() {
         currentView = 'route';
-        chatView.classList.remove('active');
-        chatView.classList.add('hidden');
-        routeResultsView.classList.remove('hidden');
-        routeResultsView.classList.add('active');
+        if (chatView) {
+            chatView.classList.remove('active');
+            chatView.classList.add('hidden');
+        }
+        if (routeResultsView) {
+            routeResultsView.classList.remove('hidden');
+            routeResultsView.classList.add('active');
+        }
         saveSession();
     }
 
     function backToChatFromRoute() {
         currentView = 'chat';
-        routeResultsView.classList.remove('active');
-        routeResultsView.classList.add('hidden');
-        chatView.classList.remove('hidden');
-        chatView.classList.add('active');
+        if (routeResultsView) {
+            routeResultsView.classList.remove('active');
+            routeResultsView.classList.add('hidden');
+        }
+        if (chatView) {
+            chatView.classList.remove('hidden');
+            chatView.classList.add('active');
+        }
         saveSession();
     }
 
     return {
         restoreSession,
-        startChat
+        startChat,
+        closeChat
     };
 })();

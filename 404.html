@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+        // SPA Redirect Hack for GitHub Pages and static servers
+        // Preserves the requested pathname, query string, and hash, passing it to index.html
+        (function() {
+            var path = window.location.pathname;
+            var search = window.location.search;
+            var hash = window.location.hash;
+
+            var pathSegments = path.split('/');
+            var repoName = "";
+            
+            // Detect if running on GitHub Pages (non-localhost) and extract repo subdirectory
+            if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && pathSegments.length > 2) {
+                repoName = '/' + pathSegments[1];
+                path = '/' + pathSegments.slice(2).join('/');
+            }
+
+            // Redirect back to root index.html with target route stored in the 'r' parameter
+            window.location.replace(
+                window.location.protocol + '//' + 
+                window.location.host + 
+                repoName + 
+                '/?r=' + encodeURIComponent(path + search + hash)
+            );
+        })();
+    </script>
+</head>
+<body>
+    <p>Redirecting to Metro Sathi...</p>
+</body>
+</html>
