@@ -1,13 +1,27 @@
 {
     "is_active": false,
     "line_name": "BLUE",
+    "line_number_label": "Line 05",
     "color": "#2196F3",
-
+    "length": "58.19 km",
+    "corridor": "ORR-Airport Corridor",
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAVGrOZM1NkeXomhfV1u6hBiWDSXYPlO918U77R15-D218LzbCza7QOwa5f4nmWAz67RVDFHgO6hT7APDsryFbjiB6YmS-wmCFsitBYeewoXLhXvNSWU3iBadNGpmtLegDL8TnU8PInZOgMNFxHJSEMrBw47mM1jtKW45DJyKBtxHzvlzZU_RV0Wy4iLetmTLfzHOni_pLI8VTzOn_MuGTvngQ-byLEQEnaa5O7n-lE4eEKt6Nj-s005Fa015vv-9G5kVCoZp4tKIRI",
+    "overview": "The highly anticipated Blue Line will run along the Outer Ring Road (ORR) and continue north directly to the Kempegowda International Airport (KIA), connecting major tech corridors and business parks.",
+    "topology_desc": "Route topology details all stations along the corridor. You can set any station as your trip start or end point instantly using the buttons below.",
+    "overview_sections": [
+        {
+            "title": "Expansion Connectivity",
+            "content": "<p class=\"text-body-md font-body-md text-on-surface-variant mb-2\">This corridor is marked as under construction in Namma Metro schedules.</p>"
+        },
+        {
+            "title": "Technology & Details",
+            "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Primarily elevated structure with dedicated station designs</li><li>Direct airport access coaches and check-in baggage facilities at select stations</li><li>Eco-friendly solar powered stations</li></ul>"
+        }
+    ],
     "terminals": {
         "start": "Central Silk Board",
         "end": "KIA Terminal"
     },
-
     "stations": [
         "Central Silk Board",
         "HSR Layout",
@@ -40,7 +54,6 @@
         "Airport City",
         "KIA Terminal"
     ],
-
     "platforms": {
         "default": {
             "towards_start": 1,
@@ -61,43 +74,152 @@
             }
         }
     },
-
     "coordinates": {
-        "Central Silk Board": { "lat": 12.9175, "lng": 77.6226 },
-        "HSR Layout": { "lat": 12.9125, "lng": 77.6310 },
-        "Agara": { "lat": 12.9195, "lng": 77.6380 },
-        "Ibbalur": { "lat": 12.9235, "lng": 77.6445 },
-        "Bellandur": { "lat": 12.9290, "lng": 77.6505 },
-        "Kadubeesanahalli": { "lat": 12.9365, "lng": 77.6585 },
-        "Kodibeesanahalli": { "lat": 12.9400, "lng": 77.6645 },
-        "Marathahalli": { "lat": 12.9560, "lng": 77.7005 },
-        "ISRO": { "lat": 12.9620, "lng": 77.7050 },
-        "Doddanekundi": { "lat": 12.9685, "lng": 77.6945 },
-        "DRDO Sports Complex": { "lat": 12.9740, "lng": 77.6885 },
-        "Saraswathi Nagar": { "lat": 12.9810, "lng": 77.6780 },
-        "Krishnarajapura (K.R.Pura)": { "lat": 12.9902, "lng": 77.6670 },
-        "Kasturi Nagar": { "lat": 12.9975, "lng": 77.6590 },
-        "Horamavu": { "lat": 13.0115, "lng": 77.6525 },
-        "HRBR Layout": { "lat": 13.0155, "lng": 77.6430 },
-        "Kalyan Nagar": { "lat": 13.0220, "lng": 77.6380 },
-        "HBR Layout": { "lat": 13.0260, "lng": 77.6285 },
-        "Nagawara": { "lat": 13.0228, "lng": 77.6130 },
-        "Veeranna Palya": { "lat": 13.0278, "lng": 77.5980 },
-        "Kempapura": { "lat": 13.0342, "lng": 77.5888 },
-        "Hebbal": { "lat": 13.0358, "lng": 77.5915 },
-        "Kodigehalli": { "lat": 13.0490, "lng": 77.5850 },
-        "Jakkur Cross": { "lat": 13.0570, "lng": 77.5810 },
-        "Yelahanka": { "lat": 13.0625, "lng": 77.5785 },
-        "Bagalur Cross": { "lat": 13.0820, "lng": 77.5740 },
-        "Bettahalasuru": { "lat": 13.1000, "lng": 77.5700 },
-        "Doddajala": { "lat": 13.1230, "lng": 77.5820 },
-        "Airport City": { "lat": 13.1520, "lng": 77.5900 },
-        "KIA Terminal": { "lat": 13.1989, "lng": 77.7068 }
+        "Central Silk Board": {
+            "lat": 12.9175,
+            "lng": 77.6226
+        },
+        "HSR Layout": {
+            "lat": 12.9125,
+            "lng": 77.6310
+        },
+        "Agara": {
+            "lat": 12.9195,
+            "lng": 77.6380
+        },
+        "Ibbalur": {
+            "lat": 12.9235,
+            "lng": 77.6445
+        },
+        "Bellandur": {
+            "lat": 12.9290,
+            "lng": 77.6505
+        },
+        "Kadubeesanahalli": {
+            "lat": 12.9365,
+            "lng": 77.6585
+        },
+        "Kodibeesanahalli": {
+            "lat": 12.9400,
+            "lng": 77.6645
+        },
+        "Marathahalli": {
+            "lat": 12.9560,
+            "lng": 77.7005
+        },
+        "ISRO": {
+            "lat": 12.9620,
+            "lng": 77.7050
+        },
+        "Doddanekundi": {
+            "lat": 12.9685,
+            "lng": 77.6945
+        },
+        "DRDO Sports Complex": {
+            "lat": 12.9740,
+            "lng": 77.6885
+        },
+        "Saraswathi Nagar": {
+            "lat": 12.9810,
+            "lng": 77.6780
+        },
+        "Krishnarajapura (K.R.Pura)": {
+            "lat": 12.9902,
+            "lng": 77.6670
+        },
+        "Kasturi Nagar": {
+            "lat": 12.9975,
+            "lng": 77.6590
+        },
+        "Horamavu": {
+            "lat": 13.0115,
+            "lng": 77.6525
+        },
+        "HRBR Layout": {
+            "lat": 13.0155,
+            "lng": 77.6430
+        },
+        "Kalyan Nagar": {
+            "lat": 13.0220,
+            "lng": 77.6380
+        },
+        "HBR Layout": {
+            "lat": 13.0260,
+            "lng": 77.6285
+        },
+        "Nagawara": {
+            "lat": 13.0228,
+            "lng": 77.6130
+        },
+        "Veeranna Palya": {
+            "lat": 13.0278,
+            "lng": 77.5980
+        },
+        "Kempapura": {
+            "lat": 13.0342,
+            "lng": 77.5888
+        },
+        "Hebbal": {
+            "lat": 13.0358,
+            "lng": 77.5915
+        },
+        "Kodigehalli": {
+            "lat": 13.0490,
+            "lng": 77.5850
+        },
+        "Jakkur Cross": {
+            "lat": 13.0570,
+            "lng": 77.5810
+        },
+        "Yelahanka": {
+            "lat": 13.0625,
+            "lng": 77.5785
+        },
+        "Bagalur Cross": {
+            "lat": 13.0820,
+            "lng": 77.5740
+        },
+        "Bettahalasuru": {
+            "lat": 13.1000,
+            "lng": 77.5700
+        },
+        "Doddajala": {
+            "lat": 13.1230,
+            "lng": 77.5820
+        },
+        "Airport City": {
+            "lat": 13.1520,
+            "lng": 77.5900
+        },
+        "KIA Terminal": {
+            "lat": 13.1989,
+            "lng": 77.7068
+        }
     },
-
     "interchanges": {
-        "Central Silk Board": ["YELLOW"],
-        "Krishnarajapura (K.R.Pura)": ["PURPLE"],
-        "Nagawara": ["PINK"]
+        "Central Silk Board": {
+            "display_name": "Central Silk Board",
+            "lines": [
+                "YELLOW"
+            ],
+            "desc": "Connects Blue Line with the Yellow Line and major bus transit networks.",
+            "icon": "hub"
+        },
+        "Krishnarajapura (K.R.Pura)": {
+            "display_name": "KR Puram",
+            "lines": [
+                "PURPLE"
+            ],
+            "desc": "Interchange connection with the Purple Line and South Western Railway hub.",
+            "icon": "train"
+        },
+        "Nagawara": {
+            "display_name": "Nagawara",
+            "lines": [
+                "PINK"
+            ],
+            "desc": "Future interchange connecting with the Pink Line.",
+            "icon": "hub"
+        }
     }
 }

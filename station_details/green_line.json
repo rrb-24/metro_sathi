@@ -1,7 +1,20 @@
 {
     "is_active": true,
     "line_name": "GREEN",
+    "line_number_label": "Line 02",
     "color": "#4CAF50",
+    "length": "30.37 km",
+    "corridor": "North-South Corridor",
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBwVJj7fFA-qaxGwUQyuKkmVjD0ZbOJ4z_UU2lOhl0Ml2nIn72RhE1-O8GOi9nS7k5x5yBS7VkwiSzbREZGRD0uVrABMr64fAZX2wRRiCoUFet6cOJgfiVPnCltxSdF6htpI1zZs6eMzdL0Bc8toO37EwTg0AqaUELnjuZUo_INjr06mywFputeYGvHF6vIXP1lKSXN_VTn-vLL2J_KzoqRVOpG0nM1EoSeeXsldyWo6cYHQUm9BE7z7bQusyWx-hAs65HBz9iBfw6l",
+    "overview": "Connecting Madavara in the north to Silk Institute in the south, the Green Line spans major industrial zones, heritage markets, and dense residential pockets, providing rapid transit across the city's vertical axis.",
+    "topology_desc": "Navigate the journey from North to South. The Green Line spans the industrial north to residential south, bridging commercial hubs and traditional street markets.",
+    "overview_sections": [
+        { "title": "Interchange Connectivity", "content": "<p class=\"text-body-md font-body-md text-on-surface-variant mb-2\">The Green Line has key interchange points:</p><ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Nadaprabhu Kempegowda (Majestic) &rarr; Interchange with Purple Line</li><li>Yeshwanthpur &rarr; Interchange with Indian Railways</li></ul>" },
+        { "title": "Infrastructure & Technology", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Double-track transit system</li><li>Continuous automatic train control (CATC)</li><li>Elevated viaduct structures and underground corridor sections in central hubs</li></ul>" },
+        { "title": "Key Areas Covered", "content": "<p class=\"text-body-md font-body-md text-on-surface-variant mb-2\">Major locations along the Green Line include:</p><ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Yeshwanthpur</li><li>Peenya</li><li>Chickpet</li><li>Majestic</li><li>Jayanagar</li><li>Banashankari</li><li>Silk Institute</li></ul>" },
+        { "title": "Timings & Frequency", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Operating Hours: 5:00 AM to 11:30 PM</li><li>Peak Frequency: ~5 minutes</li><li>End-to-End Travel Time: ~60 minutes</li></ul>" },
+        { "title": "Nearby Attractions", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>ISKCON Temple</li><li>Chickpet Markets</li><li>Lalbagh Botanical Garden</li><li>Banashankari Temple</li></ul>" }
+    ],
     "terminals": {
         "start": "Madavara",
         "end": "Silk Institute"
@@ -187,11 +200,23 @@
         }
     },
     "interchanges": {
-        "Nadaprabhu Kempegowda Station, Majestic": [
-            "PURPLE"
-        ],
-        "Rashtreeya Vidyalaya Road": [
-            "YELLOW"
-        ]
+        "Nadaprabhu Kempegowda Station, Majestic": {
+            "display_name": "Nadaprabhu Kempegowda (Majestic)",
+            "lines": ["PURPLE"],
+            "desc": "Connects Green Line with the Purple Line, KSR railway terminal, and main bus stand.",
+            "icon": "hub"
+        },
+        "Rashtreeya Vidyalaya Road": {
+            "display_name": "RV Road",
+            "lines": ["YELLOW"],
+            "desc": "Connects Green Line with the Yellow Line for seamless transfers between southern lines.",
+            "icon": "hub"
+        },
+        "Yeshwanthpur": {
+            "display_name": "Yeshwanthpur",
+            "lines": [],
+            "desc": "Major railway junction interchange connecting long-distance train travelers directly to the city transit network.",
+            "icon": "train"
+        }
     }
 }

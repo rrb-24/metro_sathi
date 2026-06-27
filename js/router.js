@@ -18,7 +18,10 @@ const Router = (() => {
         '/home': 'home',
         '/chat-guide': 'home',
         '/metro-lines': 'metro-lines',
-        '/buy-tickets': 'buy-tickets'
+        '/buy-tickets': 'buy-tickets',
+        '/privacy': 'privacy',
+        '/terms': 'terms',
+        '/support': 'support'
     };
 
     /**
@@ -47,6 +50,8 @@ const Router = (() => {
         } else if (path.startsWith('/metro-lines/')) {
             matchedRoute = '/metro-lines';
             selectedLineId = path.replace('/metro-lines/', '').toUpperCase();
+        } else if (path === '/privacy' || path === '/terms' || path === '/support') {
+            matchedRoute = path;
         } else {
             matchedRoute = '/home'; // fallback
         }
@@ -57,7 +62,7 @@ const Router = (() => {
             let htmlContent = templateCache[templateFile];
             if (!htmlContent) {
                 // Fetch the HTML template snippet from the server
-                const response = await fetch(basePath + '/' + templateFile);
+                const response = await fetch(basePath + '/' + templateFile + '?t=' + Date.now());
                 if (!response.ok) throw new Error(`Could not load template file: ${templateFile}`);
                 htmlContent = await response.text();
                 templateCache[templateFile] = htmlContent;
@@ -66,6 +71,9 @@ const Router = (() => {
             // Inject template HTML into target element
             const appContent = document.getElementById('app-content');
             appContent.innerHTML = htmlContent;
+
+            // Reset scroll position to top on route transition
+            window.scrollTo(0, 0);
 
             // Highlight navbar tabs active link
             updateNavbarActive(matchedRoute);
@@ -96,6 +104,8 @@ const Router = (() => {
                 UI.initLines(selectedLineId);
             } else if (matchedRoute === '/buy-tickets') {
                 UI.initTickets();
+            } else if (matchedRoute === '/support') {
+                UI.initSupport();
             }
 
         } catch (error) {

@@ -1,7 +1,17 @@
 {
     "is_active": false,
     "line_name": "PINK",
+    "line_number_label": "Line 04",
     "color": "#E91E63",
+    "length": "21.38 km",
+    "corridor": "Gottigere-Nagawara Corridor",
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAVGrOZM1NkeXomhfV1u6hBiWDSXYPlO918U77R15-D218LzbCza7QOwa5f4nmWAz67RVDFHgO6hT7APDsryFbjiB6YmS-wmCFsitBYeewoXLhXvNSWU3iBadNGpmtLegDL8TnU8PInZOgMNFxHJSEMrBw47mM1jtKW45DJyKBtxHzvlzZU_RV0Wy4iLetmTLfzHOni_pLI8VTzOn_MuGTvngQ-byLEQEnaa5O7n-lE4eEKt6Nj-s005Fa015vv-9G5kVCoZp4tKIRI",
+    "overview": "The upcoming Pink Line represents Namma Metro's major transit expansion connecting South Bengaluru to North-Central suburbs. The route features a large underground section designed to ease traffic density in the city core.",
+    "topology_desc": "Route topology details all stations along the corridor. You can set any station as your trip start or end point instantly using the buttons below.",
+    "overview_sections": [
+        { "title": "Expansion Connectivity", "content": "<p class=\"text-body-md font-body-md text-on-surface-variant mb-2\">This corridor is marked as under construction in Namma Metro schedules.</p>" },
+        { "title": "Technology & Details", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Combination of elevated and underground stations</li><li>Deep tunnel boring machine (TBM) operations in the central zone</li><li>CBTC signaling system integration</li></ul>" }
+    ],
 
     "terminals": {
         "start": "Kalena Agrahara",
@@ -72,8 +82,23 @@
     },
 
     "interchanges": {
-        "Mahatma Gandhi Road": ["PURPLE"],
-        "Jayadeva Hospital": ["YELLOW"],
-        "Nagawara": ["BLUE"]
+        "Mahatma Gandhi Road": {
+            "display_name": "MG Road",
+            "lines": ["PURPLE"],
+            "desc": "Interchange connection with the operational Purple Line.",
+            "icon": "hub"
+        },
+        "Jayadeva Hospital": {
+            "display_name": "Jayadeva Hospital",
+            "lines": ["YELLOW"],
+            "desc": "Major multi-level interchange linking Pink Line with the Green and Yellow lines.",
+            "icon": "alt_route"
+        },
+        "Nagawara": {
+            "display_name": "Nagawara",
+            "lines": ["BLUE"],
+            "desc": "Future interchange connecting with the Blue Line.",
+            "icon": "hub"
+        }
     }
 }

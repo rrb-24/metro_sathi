@@ -94,6 +94,14 @@ const UI = (() => {
             });
         }
 
+        // Explore Bengaluru directory redirect button click
+        const btnHomeViewLines = document.getElementById('btn-home-view-lines');
+        if (btnHomeViewLines) {
+            btnHomeViewLines.addEventListener('click', () => {
+                Router.navigate('/metro-lines');
+            });
+        }
+
         // Restore values if we have them
         if (fromInput && selectedFrom) fromInput.value = selectedFrom;
         if (toInput && selectedTo) toInput.value = selectedTo;
@@ -119,6 +127,100 @@ const UI = (() => {
                 e.preventDefault();
                 Router.navigate('/metro-lines');
             });
+        }
+
+        // Render Cards dynamically into separate sections
+        const operationalContainer = document.getElementById('metro-lines-operational-container');
+        const upcomingContainer = document.getElementById('metro-lines-upcoming-container');
+
+        if (operationalContainer && upcomingContainer) {
+            let operationalHtml = '';
+            let upcomingHtml = '';
+            const allLines = MetroData.getAllLines();
+
+            // Sort lines by line_number_label (e.g. "Line 01", "Line 02", etc.)
+            const sortedEntries = Object.entries(allLines).sort((a, b) => {
+                const labelA = a[1].line_number_label || '';
+                const labelB = b[1].line_number_label || '';
+                return labelA.localeCompare(labelB, undefined, { numeric: true, sensitivity: 'base' });
+            });
+
+            sortedEntries.forEach(([lineName, line]) => {
+                const stationsCount = line.stations.length;
+                if (line.is_active) {
+                    operationalHtml += `
+                        <div class="line-card group relative bg-surface-container-lowest border border-outline-variant rounded-xl p-8 hover:shadow-lg transition-all cursor-pointer overflow-hidden" 
+                             data-line-id="${lineName}"
+                             style="border-left-width: 8px; border-left-color: ${line.color};"
+                             onmouseenter="this.style.boxShadow='0 10px 25px -5px ${line.color}25';"
+                             onmouseleave="this.style.boxShadow='none';">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <span class="text-label-sm uppercase tracking-wider font-bold" style="color: ${line.color}">${line.line_number_label || 'Line'}</span>
+                                    <h2 class="font-headline-md text-headline-md mt-1">${lineName.charAt(0) + lineName.slice(1).toLowerCase()} Line</h2>
+                                </div>
+                                <div class="p-3 rounded-lg text-white" style="background-color: ${line.color}">
+                                    <span class="material-symbols-outlined">train</span>
+                                </div>
+                            </div>
+                            <div class="space-y-4 mb-8">
+                                <div class="flex items-center gap-3 text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-lg">distance</span>
+                                    <span class="text-body-md">${line.length || 'N/A'}</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-lg">meeting_room</span>
+                                    <span class="text-body-md">${stationsCount} Stations</span>
+                                </div>
+                            </div>
+                            <button class="w-full flex items-center justify-center gap-2 py-3 border rounded-lg font-label-md transition-all"
+                                    style="border-color: ${line.color}; color: ${line.color}; background-color: transparent;"
+                                    onmouseenter="this.style.backgroundColor='${line.color}'; this.style.color='#ffffff';"
+                                    onmouseleave="this.style.backgroundColor='transparent'; this.style.color='${line.color}';">
+                                <span>View Details</span>
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    upcomingHtml += `
+                        <div class="line-card group relative bg-surface-container-lowest border border-outline-variant rounded-xl p-8 hover:shadow-lg transition-all cursor-pointer overflow-hidden" 
+                             data-line-id="${lineName}"
+                             style="border-left-width: 8px; border-left-color: ${line.color};"
+                             onmouseenter="this.style.boxShadow='0 10px 25px -5px ${line.color}25';"
+                             onmouseleave="this.style.boxShadow='none';">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <span class="text-label-sm uppercase tracking-wider font-bold" style="color: ${line.color}">${line.line_number_label || 'Line'}</span>
+                                    <h2 class="font-headline-md text-headline-md mt-1">${lineName.charAt(0) + lineName.slice(1).toLowerCase()} Line</h2>
+                                </div>
+                                <div class="p-3 rounded-lg text-white" style="background-color: ${line.color}">
+                                    <span class="material-symbols-outlined">construction</span>
+                                </div>
+                            </div>
+                            <div class="space-y-4 mb-8">
+                                <div class="flex items-center gap-3 text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-lg">distance</span>
+                                    <span class="text-body-md">${line.length || 'N/A'}</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-lg">meeting_room</span>
+                                    <span class="text-body-md">${stationsCount} Stations</span>
+                                </div>
+                            </div>
+                            <button class="w-full flex items-center justify-center gap-2 py-3 border rounded-lg font-label-md transition-all"
+                                    style="border-color: ${line.color}; color: ${line.color}; background-color: transparent;"
+                                    onmouseenter="this.style.backgroundColor='${line.color}'; this.style.color='#ffffff';"
+                                    onmouseleave="this.style.backgroundColor='transparent'; this.style.color='${line.color}';">
+                                <span>Planned Details</span>
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    `;
+                }
+            });
+            operationalContainer.innerHTML = operationalHtml;
+            upcomingContainer.innerHTML = upcomingHtml;
         }
 
         // Metro Lines cards clicks
@@ -182,81 +284,27 @@ const UI = (() => {
         if (metroLinesListView) metroLinesListView.classList.add('hidden');
         if (metroLineDetailsView) metroLineDetailsView.classList.remove('hidden');
 
-
         const is_active = lineData.is_active;
-        const statusText = is_active ? 'Operational' : 'Under Construction';
-
-        const LINE_METADATA = {
-            'PURPLE': {
-                corridor: 'East-West Corridor',
-                image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAVGrOZM1NkeXomhfV1u6hBiWDSXYPlO918U77R15-D218LzbCza7QOwa5f4nmWAz67RVDFHgO6hT7APDsryFbjiB6YmS-wmCFsitBYeewoXLhXvNSWU3iBadNGpmtLegDL8TnU8PInZOgMNFxHJSEMrBw47mM1jtKW45DJyKBtxHzvlzZU_RV0Wy4iLetmTLfzHOni_pLI8VTzOn_MuGTvngQ-byLEQEnaa5O7n-lE4eEKt6Nj-s005Fa015vv-9G5kVCoZp4tKIRI',
-                overview: 'A vital artery of Bengaluru\'s transit system, the Purple Line spans the city\'s east-west corridor, seamlessly connecting major residential hubs to the high-tech commercial districts of Whitefield and Indiranagar.',
-                topologyDesc: 'Navigate the journey from East to West. The Purple Line serves as the backbone of Bengaluru\'s commute, featuring the city\'s deepest underground station at Majestic.',
-                interchanges: [
-                    { name: 'Majestic (Nadaprabhu Kempegowda)', desc: 'Connects Purple Line with the Green Line and Indian Railways.', icon: 'hub' },
-                    { name: 'MG Road', desc: 'Strategic hub connecting the central business district and upcoming Yellow Line extensions.', icon: 'shopping_cart' }
-                ],
-                overviewSections: [
-                    { title: 'Interchange Connectivity', content: '<p class="text-body-md font-body-md text-on-surface-variant mb-2">The Purple Line has key interchange points:</p><ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Nadaprabhu Kempegowda (Majestic) → Interchange with Green Line</li><li>Future expansions may add more connectivity</li></ul>' },
-                    { title: 'Infrastructure & Technology', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Combination of underground and elevated sections</li><li>Earthquake-resistant structures</li><li>Advanced signaling systems (Urbalis 200 ATC)</li><li>Third rail traction system (750V DC)</li></ul>' },
-                    { title: 'Key Areas Covered', content: '<p class="text-body-md font-body-md text-on-surface-variant mb-2">Major locations along the Purple Line include:</p><ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Whitefield</li><li>Indiranagar</li><li>MG Road</li><li>Cubbon Park</li><li>Majestic</li><li>City Railway Station</li><li>Kengeri / Challaghatta</li></ul>' },
-                    { title: 'Timings & Frequency', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Operating Hours: 5:00 AM to 12:00 AM</li><li>Peak Frequency: ~4 minutes</li><li>End-to-End Travel Time: ~80 minutes</li></ul>' },
-                    { title: 'Nearby Attractions', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>MG Road shopping district</li><li>Cubbon Park</li><li>Vidhana Soudha</li><li>KR Market</li><li>Commercial Street</li></ul>' }
-                ]
-            },
-            'GREEN': {
-                corridor: 'North-South Corridor',
-                image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwVJj7fFA-qaxGwUQyuKkmVjD0ZbOJ4z_UU2lOhl0Ml2nIn72RhE1-O8GOi9nS7k5x5yBS7VkwiSzbREZGRD0uVrABMr64fAZX2wRRiCoUFet6cOJgfiVPnCltxSdF6htpI1zZs6eMzdL0Bc8toO37EwTg0AqaUELnjuZUo_INjr06mywFputeYGvHF6vIXP1lKSXN_VTn-vLL2J_KzoqRVOpG0nM1EoSeeXsldyWo6cYHQUm9BE7z7bQusyWx-hAs65HBz9iBfw6l',
-                overview: 'Connecting Madavara in the north to Silk Institute in the south, the Green Line spans major industrial zones, heritage markets, and dense residential pockets, providing rapid transit across the city\'s vertical axis.',
-                topologyDesc: 'Navigate the journey from North to South. The Green Line spans the industrial north to residential south, bridging commercial hubs and traditional street markets.',
-                interchanges: [
-                    { name: 'Nadaprabhu Kempegowda (Majestic)', desc: 'Connects Green Line with the Purple Line, KSR railway terminal, and main bus stand.', icon: 'hub' },
-                    { name: 'Yeshwanthpur', desc: 'Major railway junction interchange connecting long-distance train travelers directly to the city transit network.', icon: 'train' }
-                ],
-                overviewSections: [
-                    { title: 'Interchange Connectivity', content: '<p class="text-body-md font-body-md text-on-surface-variant mb-2">The Green Line has key interchange points:</p><ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Nadaprabhu Kempegowda (Majestic) → Interchange with Purple Line</li><li>Yeshwanthpur → Interchange with Indian Railways</li></ul>' },
-                    { title: 'Infrastructure & Technology', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Double-track transit system</li><li>Continuous automatic train control (CATC)</li><li>Elevated viaduct structures and underground corridor sections in central hubs</li></ul>' },
-                    { title: 'Key Areas Covered', content: '<p class="text-body-md font-body-md text-on-surface-variant mb-2">Major locations along the Green Line include:</p><ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Yeshwanthpur</li><li>Peenya</li><li>Chickpet</li><li>Majestic</li><li>Jayanagar</li><li>Banashankari</li><li>Silk Institute</li></ul>' },
-                    { title: 'Timings & Frequency', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Operating Hours: 5:00 AM to 11:30 PM</li><li>Peak Frequency: ~5 minutes</li><li>End-to-End Travel Time: ~60 minutes</li></ul>' },
-                    { title: 'Nearby Attractions', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>ISKCON Temple</li><li>Chickpet Markets</li><li>Lalbagh Botanical Garden</li><li>Banashankari Temple</li></ul>' }
-                ]
-            },
-            'YELLOW': {
-                corridor: 'Electronic City Corridor',
-                image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAPm5aKuqrXt6VWvsDdVMWg_3SUrh5wP-oDv8zpksaNcsl43licTnthEdE9fLfRRuPpaWQqcVNpl4DNZkzT_ZWQHzZZS5g3kc3rLD8UtVsc6ikEagX1r8tZSw-BDWAXs3MmMjrF21Z7JEuuiqeLxdCECbTEEM29bRDhZLFsgH1Y7TX8JDo4MaM5ya0yvfZ-UhVlykcvc-u1pakb2x8HoeSgogHpXx_aluTHzqUgcg5Lu7qYzfkEqPBO0ByNcFZEo7hxgCsE0iZvHJae',
-                overview: 'Connecting RV Road to Bommasandra, the upcoming Yellow Line is designed to link south-central residential neighborhoods directly to Electronic City, Bengaluru\'s massive technology manufacturing hub.',
-                topologyDesc: 'Navigate the route to Electronic City. The Yellow Line serves as the tech corridor backbone, linking south-central transit junctions directly to manufacturing districts.',
-                interchanges: [
-                    { name: 'RV Road', desc: 'Connects Yellow Line with the Green Line for seamless transfers between southern lines.', icon: 'hub' },
-                    { name: 'Silk Board', desc: 'Upcoming mega interchange station connecting the Yellow Line with Blue Line bus and rail networks.', icon: 'alt_route' }
-                ],
-                overviewSections: [
-                    { title: 'Interchange Connectivity', content: '<p class="text-body-md font-body-md text-on-surface-variant mb-2">The Yellow Line will connect with other key routes:</p><ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>RV Road → Interchange with Green Line</li><li>Silk Board → Future interchange with Blue Line</li></ul>' },
-                    { title: 'Infrastructure & Technology', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Driverless train capability (GoA4)</li><li>State-of-the-art CBTC signaling</li><li>Elevated viaducts and high-capacity coaches</li></ul>' },
-                    { title: 'Key Areas Covered', content: '<p class="text-body-md font-body-md text-on-surface-variant mb-2">Major locations covered include:</p><ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>RV Road</li><li>BTM Layout</li><li>Silk Board</li><li>HSR Layout</li><li>Electronic City</li><li>Bommasandra</li></ul>' },
-                    { title: 'Timings & Frequency', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>Planned Operating Hours: 5:30 AM to 11:00 PM</li><li>Planned Peak Frequency: ~6 minutes</li><li>Estimated End-to-End Travel Time: ~35 minutes</li></ul>' },
-                    { title: 'Nearby Attractions', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>BTM Lake Park</li><li>Forum Mall Koramangala</li><li>Electronic City IT Parks</li></ul>' }
-                ]
-            }
-        };
-
-        const meta = LINE_METADATA[lineId] || {
-            corridor: 'Transit Expansion Corridor',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAVGrOZM1NkeXomhfV1u6hBiWDSXYPlO918U77R15-D218LzbCza7QOwa5f4nmWAz67RVDFHgO6hT7APDsryFbjiB6YmS-wmCFsitBYeewoXLhXvNSWU3iBadNGpmtLegDL8TnU8PInZOgMNFxHJSEMrBw47mM1jtKW45DJyKBtxHzvlzZU_RV0Wy4iLetmTLfzHOni_pLI8VTzOn_MuGTvngQ-byLEQEnaa5O7n-lE4eEKt6Nj-s005Fa015vv-9G5kVCoZp4tKIRI',
-            overview: `An integral transit corridor connecting Bengaluru neighborhoods, currently under development to expand city-wide metro accessibility on the ${lineData.line_name} Line.`,
-            topologyDesc: `Route topology details all stations along the corridor. You can set any station as your trip start or end point instantly using the buttons below.`,
-            interchanges: [
-                { name: 'Majestic Hub', desc: 'Central transit interchange connectivity.', icon: 'hub' }
-            ],
-            overviewSections: [
-                { title: 'Expansion Connectivity', content: `<p class="text-body-md font-body-md text-on-surface-variant mb-2">This corridor is marked as ${statusText.toLowerCase()} in Namma Metro schedules.</p>` },
-                { title: 'Technology', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>State-of-the-art signaling</li><li>high-capacity coaches</li><li>modern concrete elevated structures</li></ul>' }
-            ]
-        };
+        const statusText = is_active ? 'Operational' : 'Under Development';
 
         // 1. Interchange Hubs HTML
         let hubsHtml = '';
-        meta.interchanges.forEach(hub => {
+        const interchangeDetails = lineData.interchange_details || [];
+        // Extract interchanges info
+        let mappedInterchanges = [];
+        if (lineData.interchanges && !Array.isArray(lineData.interchanges)) {
+            mappedInterchanges = Object.entries(lineData.interchanges)
+                .filter(([_, info]) => info && typeof info === 'object' && info.desc)
+                .map(([stationName, info]) => ({
+                    name: info.display_name || stationName,
+                    desc: info.desc,
+                    icon: info.icon || 'hub'
+                }));
+        } else {
+            mappedInterchanges = interchangeDetails;
+        }
+
+        mappedInterchanges.forEach(hub => {
             hubsHtml += `
                 <div class="flex items-center p-6 bg-surface-container-lowest border border-outline-variant rounded-2xl gap-6 transition-all group shadow-sm"
                      style="background-color: #ffffff; border-color: #e2e8f0;"
@@ -275,6 +323,15 @@ const UI = (() => {
                 </div>
             `;
         });
+
+        // If no interchanges, show placeholder
+        if (mappedInterchanges.length === 0) {
+            hubsHtml = `
+                <div class="col-span-full text-center py-8 text-on-surface-variant font-body-md text-body-md bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm">
+                    No major interchange hubs along this corridor.
+                </div>
+            `;
+        }
 
         // 2. Stations Timeline HTML
         let stationsHtml = '';
@@ -298,8 +355,10 @@ const UI = (() => {
             let desc = '';
             let titleClass = 'font-body-lg font-bold text-on-surface';
             if (isStart || isEnd) {
-                desc = isStart ? 'Eastern Terminal • IT Hub Access' : 'Western Terminal • Academic Zone';
-                if (lineId === 'GREEN') {
+                desc = isStart ? `Terminal Station • Start: ${lineData.terminals.start}` : `Terminal Station • End: ${lineData.terminals.end}`;
+                if (lineId === 'PURPLE') {
+                    desc = isStart ? 'Eastern Terminal • IT Hub Access' : 'Western Terminal • Academic Zone';
+                } else if (lineId === 'GREEN') {
                     desc = isStart ? 'Northern Terminal • Industrial Hub Access' : 'Southern Terminal • Residential Access';
                 }
                 titleClass = 'font-headline-md text-headline-md';
@@ -338,7 +397,11 @@ const UI = (() => {
 
         // 3. Overview Sections HTML
         let sectionsHtml = '';
-        meta.overviewSections.forEach(sec => {
+        const overviewSections = lineData.overview_sections || [
+            { title: 'Expansion Connectivity', content: `<p class="text-body-md font-body-md text-on-surface-variant mb-2">This corridor is marked as ${statusText.toLowerCase()} in Namma Metro schedules.</p>` },
+            { title: 'Technology', content: '<ul class="text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5"><li>State-of-the-art signaling</li><li>high-capacity coaches</li><li>modern concrete elevated structures</li></ul>' }
+        ];
+        overviewSections.forEach(sec => {
             sectionsHtml += `
                 <div class="border-l-4 pl-6" style="border-color: ${lineData.color}">
                     <h3 class="font-headline-md text-headline-md text-on-surface mb-3">${escapeHtml(sec.title)}</h3>
@@ -348,20 +411,32 @@ const UI = (() => {
         });
 
         // Render everything dynamically into lineDetailContainer
+        const corridor = lineData.corridor || 'Transit Expansion Corridor';
+        const overviewText = lineData.overview || `An integral transit corridor connecting Bengaluru neighborhoods, currently under development to expand city-wide metro accessibility on the ${lineData.line_name} Line.`;
+        const imageSrc = lineData.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAVGrOZM1NkeXomhfV1u6hBiWDSXYPlO918U77R15-D218LzbCza7QOwa5f4nmWAz67RVDFHgO6hT7APDsryFbjiB6YmS-wmCFsitBYeewoXLhXvNSWU3iBadNGpmtLegDL8TnU8PInZOgMNFxHJSEMrBw47mM1jtKW45DJyKBtxHzvlzZU_RV0Wy4iLetmTLfzHOni_pLI8VTzOn_MuGTvngQ-byLEQEnaa5O7n-lE4eEKt6Nj-s005Fa015vv-9G5kVCoZp4tKIRI';
+        const topologyDesc = lineData.topology_desc || `Route topology details all stations along the corridor. You can set any station as your trip start or end point instantly using the buttons below.`;
+
+        const badgeColor = is_active ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-amber-100 text-amber-800 border-amber-200';
+
         lineDetailContainer.innerHTML = `
             <!-- Hero Section -->
             <section class="relative w-full py-20 px-gutter overflow-hidden">
                 <div class="max-w-max-width mx-auto relative z-10 flex flex-col md:flex-row items-center gap-12">
                     <div class="flex-1 text-center md:text-left">
-                        <span class="inline-block px-4 py-1 rounded-full text-label-md font-label-md mb-6 uppercase tracking-wider bg-surface-container-high" style="background-color: ${lineData.color}15; color: ${lineData.color}">${escapeHtml(meta.corridor)}</span>
+                        <div class="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-6">
+                            <span class="inline-block px-4 py-1 rounded-full text-label-md font-label-md uppercase tracking-wider bg-surface-container-high" style="background-color: ${lineData.color}15; color: ${lineData.color}">${escapeHtml(corridor)}</span>
+                            <span class="inline-block px-4 py-1 rounded-full text-label-md font-label-md uppercase tracking-wider border font-bold ${badgeColor}">
+                                ${statusText}
+                            </span>
+                        </div>
                         <h1 class="font-headline-xl text-headline-xl mb-6" style="color: ${lineData.color}">${lineData.line_name.charAt(0) + lineData.line_name.slice(1).toLowerCase()} Line</h1>
                         <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
-                            ${escapeHtml(meta.overview)}
+                            ${escapeHtml(overviewText)}
                         </p>
                     </div>
                     <div class="flex-1 w-full max-w-md">
                         <div class="aspect-square rounded-3xl overflow-hidden shadow-xl border border-outline-variant">
-                            <img class="w-full h-full object-cover" src="${meta.image}" alt="${lineData.line_name} Line">
+                            <img class="w-full h-full object-cover" src="${imageSrc}" alt="${lineData.line_name} Line">
                         </div>
                     </div>
                 </div>
@@ -382,7 +457,7 @@ const UI = (() => {
                             <span class="material-symbols-outlined">straighten</span>
                         </div>
                         <div class="text-on-surface-variant font-label-md text-label-md uppercase mb-1">Length</div>
-                        <div class="font-headline-md text-headline-md text-on-surface">${lineId === 'PURPLE' ? '43.49 km' : lineId === 'GREEN' ? '30.37 km' : lineId === 'YELLOW' ? '18.82 km' : 'Upcoming'}</div>
+                        <div class="font-headline-md text-headline-md text-on-surface">${lineData.length || 'Upcoming'}</div>
                     </div>
                     <div class="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow">
                         <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style="background-color: ${lineData.color}15; color: ${lineData.color}">
@@ -413,7 +488,7 @@ const UI = (() => {
                             <div class="sticky top-24">
                                 <h2 class="font-headline-lg text-headline-lg text-on-surface mb-6">Route Topology</h2>
                                 <p class="text-on-surface-variant font-body-md text-body-md mb-8">
-                                    ${escapeHtml(meta.topologyDesc)}
+                                    ${escapeHtml(topologyDesc)}
                                 </p>
                                 <div class="space-y-4">
                                     <div class="flex items-center gap-3">
@@ -443,7 +518,7 @@ const UI = (() => {
                 <div class="max-w-3xl mx-auto">
                     <h2 class="font-headline-lg text-headline-lg text-on-surface mb-6">Detailed Overview</h2>
                     <p class="font-body-lg text-body-lg text-on-surface-variant mb-12">
-                        The ${lineData.line_name.charAt(0) + lineData.line_name.slice(1).toLowerCase()} Line represents the pinnacle of modern urban planning in Bengaluru, offering a high-frequency, reliable alternative to road congestion. It integrates historical city centers with the rapidly developing outskirts.
+                        The ${lineData.line_name.charAt(0) + lineData.line_name.slice(1).toLowerCase()} Line represents Namma Metro's commitment to high-frequency, reliable rapid transit, integrating key sectors across the metropolitan area.
                     </p>
                     <div class="space-y-12">
                         ${sectionsHtml}
@@ -882,11 +957,61 @@ const UI = (() => {
         return div.innerHTML;
     }
 
+    /**
+     * Initialize Support & Feedback View.
+     */
+    function initSupport() {
+        // Nothing special to initialize on start
+    }
+
+    /**
+     * Handle support form submission simulator.
+     */
+    function handleSupportSubmit() {
+        const name = document.getElementById('support-name')?.value;
+        const email = document.getElementById('support-email')?.value;
+        const topic = document.getElementById('support-type')?.value;
+        const message = document.getElementById('support-message')?.value;
+
+        console.log('--- Support Form Submitted ---');
+        console.log('Name:', name);
+        console.log('Email:', email);
+        console.log('Topic:', topic);
+        console.log('Message:', message);
+
+        const formContainer = document.getElementById('support-form-container');
+        const successContainer = document.getElementById('support-success-container');
+
+        if (formContainer && successContainer) {
+            formContainer.classList.add('hidden');
+            successContainer.classList.remove('hidden');
+        }
+    }
+
+    /**
+     * Reset support form state.
+     */
+    function resetSupportForm() {
+        const form = document.getElementById('support-form');
+        if (form) form.reset();
+
+        const formContainer = document.getElementById('support-form-container');
+        const successContainer = document.getElementById('support-success-container');
+
+        if (formContainer && successContainer) {
+            successContainer.classList.add('hidden');
+            formContainer.classList.remove('hidden');
+        }
+    }
+
     // Public API
     return {
         initHome,
         initLines,
         initTickets,
+        initSupport,
+        handleSupportSubmit,
+        resetSupportForm,
         toggleExpand,
         renderRoute,
         showLineDetails,

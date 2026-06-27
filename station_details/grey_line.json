@@ -1,0 +1,72 @@
+{
+    "is_active": false,
+    "line_name": "GREY",
+    "line_number_label": "Line 06",
+    "color": "#78909C",
+    "length": "12.50 km",
+    "corridor": "Sarjapur-ORR Corridor",
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAVGrOZM1NkeXomhfV1u6hBiWDSXYPlO918U77R15-D218LzbCza7QOwa5f4nmWAz67RVDFHgO6hT7APDsryFbjiB6YmS-wmCFsitBYeewoXLhXvNSWU3iBadNGpmtLegDL8TnU8PInZOgMNFxHJSEMrBw47mM1jtKW45DJyKBtxHzvlzZU_RV0Wy4iLetmTLfzHOni_pLI8VTzOn_MuGTvngQ-byLEQEnaa5O7n-lE4eEKt6Nj-s005Fa015vv-9G5kVCoZp4tKIRI",
+    "overview": "The proposed Grey Line connects Sarjapur in the southeast to Outer Ring Road hubs, bridging high-growth residential zones and commercial business parks.",
+    "topology_desc": "Navigate the route along the upcoming Grey Line corridor, connecting suburban residential blocks to major metro network hubs.",
+    "overview_sections": [
+        {
+            "title": "Technology & Logistics",
+            "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Elevated double-track configuration</li><li>Automated signalling for safe and frequent operations</li><li>Integration with public bus transit and other metro lines</li></ul>"
+        }
+    ],
+    "terminals": {
+        "start": "Sarjapur",
+        "end": "Silk Board"
+    },
+    "stations": [
+        "Sarjapur",
+        "Doddakannelli",
+        "Karmelaram",
+        "Ibblur",
+        "HSR Layout Sector 1",
+        "Silk Board"
+    ],
+    "platforms": {
+        "default": {
+            "towards_start": 1,
+            "towards_end": 2
+        }
+    },
+    "coordinates": {
+        "Sarjapur": {
+            "lat": 12.860000,
+            "lng": 77.780000
+        },
+        "Doddakannelli": {
+            "lat": 12.900000,
+            "lng": 77.690000
+        },
+        "Karmelaram": {
+            "lat": 12.910000,
+            "lng": 77.680000
+        },
+        "Ibblur": {
+            "lat": 12.920000,
+            "lng": 77.670000
+        },
+        "HSR Layout Sector 1": {
+            "lat": 12.910000,
+            "lng": 77.640000
+        },
+        "Silk Board": {
+            "lat": 12.917222,
+            "lng": 77.622500
+        }
+    },
+    "interchanges": {
+        "Silk Board": {
+            "display_name": "Silk Board",
+            "lines": [
+                "YELLOW",
+                "BLUE"
+            ],
+            "desc": "Proposed multi-line interchange node with Yellow and Blue lines.",
+            "icon": "hub"
+        }
+    }
+}

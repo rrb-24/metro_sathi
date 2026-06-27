@@ -4,15 +4,6 @@
  */
 
 const MetroData = (() => {
-    // Line file paths (relative to index.html)
-    const LINE_FILES = [
-        'station_details/green_line.json',
-        'station_details/purple_line.json',
-        'station_details/yellow_line.json',
-        'station_details/pink_line.json',
-        'station_details/blue_line.json'
-    ];
-
     // Loaded line data keyed by line name
     let lines = {};
 
@@ -30,8 +21,11 @@ const MetroData = (() => {
      * @returns {Promise<void>}
      */
     async function load() {
+        const registryResponse = await fetch('station_details/registry.json?t=' + Date.now());
+        const lineFiles = await registryResponse.json();
+
         const responses = await Promise.all(
-            LINE_FILES.map(f => fetch(f).then(r => r.json()))
+            lineFiles.map(f => fetch(f + '?t=' + Date.now()).then(r => r.json()))
         );
 
         lines = {};
@@ -88,7 +82,8 @@ const MetroData = (() => {
             const lineName = lineData.line_name;
             if (!lineData.interchanges) return;
 
-            Object.entries(lineData.interchanges).forEach(([stationName, connectedLines]) => {
+            Object.entries(lineData.interchanges).forEach(([stationName, interchangeInfo]) => {
+                const connectedLines = Array.isArray(interchangeInfo) ? interchangeInfo : (interchangeInfo.lines || []);
                 connectedLines.forEach(otherLineName => {
                     const otherLine = lines[otherLineName];
                     if (!otherLine) return;

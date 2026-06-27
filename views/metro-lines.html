@@ -6,108 +6,21 @@
             <h1 class="font-headline-xl text-headline-xl text-on-surface mb-4">Metro Lines Directory</h1>
             <p class="text-body-lg text-on-surface-variant max-w-2xl">Explore Bengaluru's rapid transit network. Accurate station lists, interchange points, and real-time connectivity data at your fingertips.</p>
         </div>
-        <!-- Bento Grid of Line Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            <!-- Purple Line -->
-            <div class="line-card group relative bg-surface-container-lowest border border-outline-variant rounded-xl p-8 hover:shadow-lg transition-all line-glow-purple cursor-pointer overflow-hidden" data-line-id="PURPLE">
-                <div class="absolute top-0 left-0 w-2 h-full bg-primary"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <div>
-                        <span class="text-label-sm uppercase tracking-wider text-primary font-bold">Line 01</span>
-                        <h2 class="font-headline-md text-headline-md mt-1">Purple Line</h2>
-                    </div>
-                    <div class="bg-primary-fixed p-3 rounded-lg text-on-primary-fixed">
-                        <span class="material-symbols-outlined">train</span>
-                    </div>
-                </div>
-                <div class="space-y-4 mb-8">
-                    <div class="flex items-center gap-3 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-lg">distance</span>
-                        <span class="text-body-md">43.49 km</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-lg">meeting_room</span>
-                        <span class="text-body-md">37 Stations</span>
-                    </div>
-                </div>
-                <button class="w-full flex items-center justify-center gap-2 py-3 border border-primary text-primary rounded-lg font-label-md group-hover:bg-primary group-hover:text-on-primary transition-all">
-                    <span>View Details</span>
-                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </button>
+        <!-- Operational Network Section -->
+        <div class="mb-12">
+            <h2 class="font-headline-lg text-headline-lg text-on-surface mb-3">Operational Lines</h2>
+            <p class="text-body-md text-on-surface-variant max-w-xl mb-6">Currently active and running routes in Bengaluru metro network.</p>
+            <div id="metro-lines-operational-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Operational cards will be dynamically rendered here -->
             </div>
+        </div>
 
-            <!-- Green Line -->
-            <div class="line-card group relative bg-surface-container-lowest border border-outline-variant rounded-xl p-8 hover:shadow-lg transition-all line-glow-green cursor-pointer overflow-hidden" data-line-id="GREEN">
-                <div class="absolute top-0 left-0 w-2 h-full bg-secondary"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <div>
-                        <span class="text-label-sm uppercase tracking-wider text-secondary font-bold">Line 02</span>
-                        <h2 class="font-headline-md text-headline-md mt-1">Green Line</h2>
-                    </div>
-                    <div class="bg-secondary-fixed p-3 rounded-lg text-on-secondary-fixed">
-                        <span class="material-symbols-outlined">train</span>
-                    </div>
-                </div>
-                <div class="space-y-4 mb-8">
-                    <div class="flex items-center gap-3 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-lg">distance</span>
-                        <span class="text-body-md">30.37 km</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-lg">meeting_room</span>
-                        <span class="text-body-md">29 Stations</span>
-                    </div>
-                </div>
-                <button class="w-full flex items-center justify-center gap-2 py-3 border border-secondary text-secondary rounded-lg font-label-md group-hover:bg-secondary group-hover:text-on-primary transition-all">
-                    <span>View Details</span>
-                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </button>
-            </div>
-
-            <!-- Yellow Line (Operational in Data) -->
-            <div class="line-card group relative bg-surface-container-lowest border border-outline-variant rounded-xl p-8 hover:shadow-lg transition-all cursor-pointer overflow-hidden" data-line-id="YELLOW" style="box-shadow: 0 0 15px -3px rgba(217, 119, 6, 0.15)">
-                <div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <div>
-                        <span class="text-label-sm uppercase tracking-wider text-amber-600 font-bold">Line 03</span>
-                        <h2 class="font-headline-md text-headline-md mt-1">Yellow Line</h2>
-                    </div>
-                    <div class="bg-amber-100 p-3 rounded-lg text-amber-800">
-                        <span class="material-symbols-outlined">train</span>
-                    </div>
-                </div>
-                <div class="space-y-4 mb-8">
-                    <div class="flex items-center gap-3 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-lg">distance</span>
-                        <span class="text-body-md">18.82 km</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-lg">meeting_room</span>
-                        <span class="text-body-md">16 Stations</span>
-                    </div>
-                </div>
-                <button class="w-full flex items-center justify-center gap-2 py-3 border border-amber-600 text-amber-600 rounded-lg font-label-md group-hover:bg-amber-600 group-hover:text-on-primary transition-all">
-                    <span>View Details</span>
-                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </button>
-            </div>
-
-            <!-- Pink Line (Coming Soon) -->
-            <div class="relative bg-surface-container-low border border-outline-variant border-dashed rounded-xl p-8 opacity-70 flex flex-col justify-center items-center text-center">
-                <div class="mb-4">
-                    <span class="material-symbols-outlined text-5xl text-outline">construction</span>
-                </div>
-                <h3 class="font-headline-md text-headline-md text-on-surface-variant">Pink Line</h3>
-                <p class="text-label-md text-outline mt-2">Expansion in Progress</p>
-            </div>
-
-            <!-- Blue Line (Coming Soon) -->
-            <div class="relative bg-surface-container-low border border-outline-variant border-dashed rounded-xl p-8 opacity-70 flex flex-col justify-center items-center text-center">
-                <div class="mb-4">
-                    <span class="material-symbols-outlined text-5xl text-outline">construction</span>
-                </div>
-                <h3 class="font-headline-md text-headline-md text-on-surface-variant">Blue Line</h3>
-                <p class="text-label-md text-outline mt-2">Airport Route (Construction)</p>
+        <!-- Future Expansions Section -->
+        <div class="mb-12 border-t border-outline-variant/30 pt-10">
+            <h2 class="font-headline-lg text-headline-lg text-on-surface mb-3">Future Expansions & Extensions</h2>
+            <p class="text-body-md text-on-surface-variant max-w-xl mb-6">Planned, proposed, or currently under development routes.</p>
+            <div id="metro-lines-upcoming-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Upcoming cards will be dynamically rendered here -->
             </div>
         </div>
     </div>

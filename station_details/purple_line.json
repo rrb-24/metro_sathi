@@ -1,7 +1,20 @@
 {
     "is_active": true,
     "line_name": "PURPLE",
+    "line_number_label": "Line 01",
     "color": "#9C27B0",
+    "length": "43.49 km",
+    "corridor": "East-West Corridor",
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAVGrOZM1NkeXomhfV1u6hBiWDSXYPlO918U77R15-D218LzbCza7QOwa5f4nmWAz67RVDFHgO6hT7APDsryFbjiB6YmS-wmCFsitBYeewoXLhXvNSWU3iBadNGpmtLegDL8TnU8PInZOgMNFxHJSEMrBw47mM1jtKW45DJyKBtxHzvlzZU_RV0Wy4iLetmTLfzHOni_pLI8VTzOn_MuGTvngQ-byLEQEnaa5O7n-lE4eEKt6Nj-s005Fa015vv-9G5kVCoZp4tKIRI",
+    "overview": "A vital artery of Bengaluru's transit system, the Purple Line spans the city's east-west corridor, seamlessly connecting major residential hubs to the high-tech commercial districts of Whitefield and Indiranagar.",
+    "topology_desc": "Navigate the journey from East to West. The Purple Line serves as the backbone of Bengaluru's commute, featuring the city's deepest underground station at Majestic.",
+    "overview_sections": [
+        { "title": "Interchange Connectivity", "content": "<p class=\"text-body-md font-body-md text-on-surface-variant mb-2\">The Purple Line has key interchange points:</p><ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Nadaprabhu Kempegowda (Majestic) &rarr; Interchange with Green Line</li><li>Future expansions may add more connectivity</li></ul>" },
+        { "title": "Infrastructure & Technology", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Combination of underground and elevated sections</li><li>Earthquake-resistant structures</li><li>Advanced signaling systems (Urbalis 200 ATC)</li><li>Third rail traction system (750V DC)</li></ul>" },
+        { "title": "Key Areas Covered", "content": "<p class=\"text-body-md font-body-md text-on-surface-variant mb-2\">Major locations along the Purple Line include:</p><ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Whitefield</li><li>Indiranagar</li><li>MG Road</li><li>Cubbon Park</li><li>Majestic</li><li>City Railway Station</li><li>Kengeri / Challaghatta</li></ul>" },
+        { "title": "Timings & Frequency", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Operating Hours: 5:00 AM to 12:00 AM</li><li>Peak Frequency: ~4 minutes</li><li>End-to-End Travel Time: ~80 minutes</li></ul>" },
+        { "title": "Nearby Attractions", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>MG Road shopping district</li><li>Cubbon Park</li><li>Vidhana Soudha</li><li>KR Market</li><li>Commercial Street</li></ul>" }
+    ],
     "terminals": {
         "start": "Whitefield (Kadugodi)",
         "end": "Challaghatta"
@@ -216,14 +229,23 @@
         }
     },
     "interchanges": {
-        "Nadaprabhu Kempegowda Station, Majestic": [
-            "GREEN"
-        ],
-        "Krishnarajapura (K.R.Pura)": [
-            "BLUE"
-        ],
-        "Mahatma Gandhi Road": [
-            "PINK"
-        ]
+        "Nadaprabhu Kempegowda Station, Majestic": {
+            "display_name": "Majestic (Nadaprabhu Kempegowda)",
+            "lines": ["GREEN"],
+            "desc": "Connects Purple Line with the Green Line and Indian Railways.",
+            "icon": "hub"
+        },
+        "Mahatma Gandhi Road": {
+            "display_name": "MG Road",
+            "lines": ["PINK"],
+            "desc": "Strategic hub connecting the central business district and upcoming Yellow Line extensions.",
+            "icon": "shopping_cart"
+        },
+        "Krishnarajapura (K.R.Pura)": {
+            "display_name": "KR Puram",
+            "lines": ["BLUE"],
+            "desc": "Strategic hub connecting Purple Line with the upcoming Blue Line.",
+            "icon": "train"
+        }
     }
 }

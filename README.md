@@ -1,6 +1,6 @@
 # 🚇 Metro Sathi
 
-**Your Namma Metro Companion** — A route-finding web app for Bangalore's Namma Metro that guides users step-by-step on how to travel between any two stations, with platform numbers, direction guidance, and interchange instructions.
+**Your Namma Metro Companion** — A client-side, dynamic Single-Page Application (SPA) for Bangalore's Namma Metro. It guides users step-by-step on how to travel between any two stations with platform numbers, direction guidance, interchange instructions, real-time GPS tracking, and a smart conversational transit guide.
 
 🌐 **Live App:** [rrb-24.github.io/metro_sathi](https://rrb-24.github.io/metro_sathi/)
 
@@ -8,63 +8,87 @@
 
 ## ✨ Features
 
-- **Route Finding** — Shortest path between any two stations using BFS algorithm
-- **Step-by-Step Guidance** — Board at station X, Platform Y, towards Z, deboard after N stops
-- **Cross-Line Routes** — Handles interchanges across all 5 metro lines automatically
-- **Platform Numbers** — Shows correct platform based on direction of travel, with interchange overrides
-- **Autocomplete Search** — Fuzzy search across 133 stations as you type
-- **Swap Stations** — Quick swap button to reverse your journey
-- **Coming Soon Lines** — Routes through upcoming lines (Blue, Pink) shown with a badge
-- **Fully Offline** — No backend, no API calls — everything runs in the browser
-- **Mobile-First** — Responsive dark-mode UI designed for use at metro stations
+- **Route Finding & Navigation** — Instant shortest-path calculation between any two stations using a Breadth-First Search (BFS) graph algorithm.
+- **Dynamic SPA Router** — Clean History API-driven URLs (e.g. `/`, `/metro-lines`, `/metro-lines/purple`, `/chat-guide`) with dynamic view template injection and a robust `404.html` redirection fallback simulator for static hosts.
+- **AI Chat Guide** — Conversational transit assistant that helps commuters plan itineraries, discover landmarks, and estimate travel costs, maintaining active session recovery across page updates.
+- **Live GPS Proximity Tracker** — Station-by-station path tracker with automatic geo-fencing (approaching/arrived alerts) and an intelligent time-based underground simulator for signal-deprived tunnels.
+- **Registry-driven Metro Directory** — Modular configuration directory where lines and stations are loaded dynamically from a single central registry file.
+- **Platform Numbers & Overrides** — Direction-aware platform listings at each station with transit interchange override capabilities.
+- **Fuzzy Autocomplete** — Fast search filter matching any of the 140+ stations as you type.
+- **Premium Solid Light Design** — Sleek layouts designed under the Google Stitch guidelines featuring rich colors, card sections, and mobile-responsive views.
+
+---
 
 ## 🗺️ Supported Metro Lines
 
-| Line | Stations | Status |
-|------|----------|--------|
-| 🟢 Green | Madavara ↔ Silk Institute (32 stations) | ✅ Active |
-| 🟣 Purple | Whitefield ↔ Challaghatta (37 stations) | ✅ Active |
-| 🟡 Yellow | RV Road ↔ Bommasandra (16 stations) | ✅ Active |
-| 🩷 Pink | Kalena Agrahara ↔ Nagawara (18 stations) | ⏳ Upcoming |
-| 🔵 Blue | Silk Board ↔ KIA Terminal (30 stations) | ⏳ Upcoming |
+| Line | Terminals | Status |
+|------|-----------|--------|
+| 🟢 Green | Madavara ↔ Silk Institute (32 stations) | ✅ Operational |
+| 🟣 Purple | Whitefield ↔ Challaghatta (37 stations) | ✅ Operational |
+| 🟡 Yellow | RV Road ↔ Bommasandra (16 stations) | ✅ Operational |
+| 🟤 Grey | Madhavara ↔ Peenya (5 stations) | ✅ Operational |
+| 🩷 Pink | Kalena Agrahara ↔ Nagawara (18 stations) | ⏳ Under Development |
+| 🔵 Blue | Silk Board ↔ KIA Terminal (30 stations) | ⏳ Under Development |
 
-**Interchange Stations:** Majestic (Green ↔ Purple), RV Road (Green ↔ Yellow), K.R.Pura (Purple ↔ Blue), MG Road (Purple ↔ Pink), Jayadeva (Yellow ↔ Pink), Silk Board (Yellow ↔ Blue), Nagawara (Pink ↔ Blue)
+**Interchange Stations:** Majestic (Green ↔ Purple), RV Road (Green ↔ Yellow), K.R.Pura (Purple ↔ Blue), MG Road (Purple ↔ Pink), Jayadeva (Yellow ↔ Pink), Silk Board (Yellow ↔ Blue), Nagawara (Pink ↔ Blue), Yeshwanthpur (Green ↔ Indian Railways Interchange Hub)
+
+---
 
 ## 🛠️ Tech Stack
 
-- **HTML/CSS/JS** — No frameworks, no build tools, no npm dependencies
-- **JSON Data** — Station data stored in static JSON files (~6 KB total)
-- **BFS Algorithm** — Breadth-first search on an adjacency graph for shortest path
-- **GitHub Pages** — Free static hosting
+- **Frontend Core:** Plain HTML5, Javascript (ES6), and HSL-tailored CSS variables.
+- **Dynamic Views:** Fetch API template caching system and history-based state updates.
+- **Pathfinder:** Adjacency list graph built dynamically from static JSON registry configurations.
+- **Hosting:** Static hosting ready (e.g., GitHub Pages).
+
+---
 
 ## 📁 Project Structure
 
 ```
 metro_sathi/
-├── index.html                # Main single-page app
+├── index.html                # SPA Shell Layout
+├── 404.html                  # SPA Redirect Proxy (Static Host Fallback)
 ├── css/
-│   └── style.css             # Dark glassmorphism design system
+│   └── style.css             # Unified Stitch Design tokens & rules
 ├── js/
-│   ├── metro-data.js         # Data loading, graph building, station registry
-│   ├── route-finder.js       # BFS pathfinding, segment builder, platform lookup
-│   └── ui.js                 # Autocomplete, route rendering, animations
-└── station_details/          # Metro line data
+│   ├── metro-data.js         # Registry loader, graph builder, station registry
+│   ├── route-finder.js       # BFS pathfinding & segment grouping
+│   ├── gps-tracker.js        # Geolocation tracker & underground fallback timer
+│   ├── chat.js               # Conversational assistant & session recovery
+│   ├── ui.js                 # Autocomplete, sections layout, details views
+│   └── router.js             # SPA clean URL history manager
+├── views/                    # Dynamic HTML page templates
+│   ├── home.html             # Pathfinder UI & Chat interface
+│   ├── metro-lines.html      # Metro Line list sections & timelines
+│   ├── buy-tickets.html      # Mobile ticket instructions
+│   ├── privacy.html          # Privacy Policy copy
+│   ├── terms.html            # Terms of Service / Disclaimer copy
+│   └── support.html          # Interactive Support form & FAQs
+└── station_details/          # Modular Metro Line configurations
+    ├── registry.json         # Master list of active JSON paths
     ├── green_line.json
     ├── purple_line.json
     ├── yellow_line.json
+    ├── grey_line.json
     ├── pink_line.json
     └── blue_line.json
 ```
 
+---
+
 ## 📐 JSON Data Format
 
-Each metro line file follows this structure:
+All metro lines are declared inside `registry.json` and follow the unified schema below:
 
 ```json
 {
   "is_active": true,
   "line_name": "GREEN",
+  "line_number_label": "Line 02",
   "color": "#4CAF50",
+  "length": "30.37 km",
+  "corridor": "North-South Corridor",
   "terminals": {
     "start": "Madavara",
     "end": "Silk Institute"
@@ -73,51 +97,48 @@ Each metro line file follows this structure:
   "platforms": {
     "default": { "towards_start": 1, "towards_end": 2 },
     "overrides": {
-      "Interchange Station Name": { "towards_start": 3, "towards_end": 4 }
+      "Yeshwanthpur": { "towards_start": 1, "towards_end": 2 }
     }
   },
   "interchanges": {
-    "Interchange Station Name": ["OTHER_LINE"]
+    "Majestic": {
+      "display_name": "Majestic (Nadaprabhu Kempegowda)",
+      "lines": ["PURPLE"],
+      "desc": "Transfer between Purple and Green lines.",
+      "icon": "hub"
+    }
   }
 }
 ```
 
-- `stations` — Ordered array; position = station number, order = direction
-- `terminals` — Makes `towards_start`/`towards_end` self-documenting
-- `platforms.default` — Covers most stations; `overrides` only for interchange exceptions
-- `interchanges` — Which other lines connect at each interchange station
-
-## 🚀 Run Locally
-
-No install needed. Just serve the files:
-
-```bash
-# Option 1: npx serve
-npx serve .
-
-# Option 2: Python
-python -m http.server 3000
-
-# Option 3: VS Code Live Server extension
-```
-
-Open `http://localhost:3000` in your browser.
-
-> **Note:** Opening `index.html` directly via `file://` won't work because browsers block `fetch()` for local files. You need a local server.
-
-## 🤝 Contributing
-
-1. Fork the repo
-2. Update station data in `station_details/*.json`
-3. Test locally with `npx serve .`
-4. Submit a PR
-
-**To update platform numbers:** Edit the `platforms.overrides` section in the relevant line JSON. The `default` covers regular stations; only interchange stations need overrides.
-
-## 📄 License
-
-RRB
+- `is_active` — Boolean flag indicating whether the line is operational.
+- `stations` — Ordered array representing sequence of travel.
+- `interchanges` — Unified dictionary defining connected lines, displays, descriptions, and Google Material Symbol icons.
 
 ---
 
-Made with ♥ for Bengaluru commuters
+## 🚀 Run Locally
+
+The project runs completely client-side. Serve the workspace locally:
+
+```bash
+# Serve locally on port 8085
+npx serve . -p 8085
+```
+
+Open `http://localhost:8085` in your browser.
+
+> **Note:** Opening `index.html` directly via `file://` won't work because modern browsers restrict dynamic `fetch()` requests on local filesystems. You must run a local web server.
+
+---
+
+## 🤝 Contributing
+
+1. Update or create station data files in `station_details/*.json`.
+2. Add new files to `station_details/registry.json`.
+3. Test locally using `npx serve . -p 8085`.
+4. Submit a Pull Request.
+
+---
+
+Made with ♥ for Bengaluru commuters.

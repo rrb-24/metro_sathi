@@ -1,7 +1,20 @@
 {
     "is_active": true,
     "line_name": "YELLOW",
+    "line_number_label": "Line 03",
     "color": "#FFCA28",
+    "length": "18.82 km",
+    "corridor": "Electronic City Corridor",
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAPm5aKuqrXt6VWvsDdVMWg_3SUrh5wP-oDv8zpksaNcsl43licTnthEdE9fLfRRuPpaWQqcVNpl4DNZkzT_ZWQHzZZS5g3kc3rLD8UtVsc6ikEagX1r8tZSw-BDWAXs3MmMjrF21Z7JEuuiqeLxdCECbTEEM29bRDhZLFsgH1Y7TX8JDo4MaM5ya0yvfZ-UhVlykcvc-u1pakb2x8HoeSgogHpXx_aluTHzqUgcg5Lu7qYzfkEqPBO0ByNcFZEo7hxgCsE0iZvHJae",
+    "overview": "Connecting RV Road to Bommasandra, the upcoming Yellow Line is designed to link south-central residential neighborhoods directly to Electronic City, Bengaluru's massive technology manufacturing hub.",
+    "topology_desc": "Navigate the route to Electronic City. The Yellow Line serves as the tech corridor backbone, linking south-central transit junctions directly to manufacturing districts.",
+    "overview_sections": [
+        { "title": "Interchange Connectivity", "content": "<p class=\"text-body-md font-body-md text-on-surface-variant mb-2\">The Yellow Line will connect with other key routes:</p><ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>RV Road &rarr; Interchange with Green Line</li><li>Silk Board &rarr; Future interchange with Blue Line</li></ul>" },
+        { "title": "Infrastructure & Technology", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Driverless train capability (GoA4)</li><li>State-of-the-art CBTC signaling</li><li>Elevated viaducts and high-capacity coaches</li></ul>" },
+        { "title": "Key Areas Covered", "content": "<p class=\"text-body-md font-body-md text-on-surface-variant mb-2\">Major locations covered include:</p><ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>RV Road</li><li>BTM Layout</li><li>Silk Board</li><li>HSR Layout</li><li>Electronic City</li><li>Bommasandra</li></ul>" },
+        { "title": "Timings & Frequency", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>Planned Operating Hours: 5:30 AM to 11:00 PM</li><li>Planned Peak Frequency: ~6 minutes</li><li>Estimated End-to-End Travel Time: ~35 minutes</li></ul>" },
+        { "title": "Nearby Attractions", "content": "<ul class=\"text-body-md font-body-md text-on-surface-variant leading-relaxed space-y-2 list-disc pl-5\"><li>BTM Lake Park</li><li>Forum Mall Koramangala</li><li>Electronic City IT Parks</li></ul>" }
+    ],
 
     "terminals": {
         "start": "Rashtreeya Vidyalaya Road",
@@ -68,8 +81,17 @@
     },
 
     "interchanges": {
-        "Rashtreeya Vidyalaya Road": ["GREEN"],
-        "Jayadeva Hospital": ["PINK"],
-        "Central Silk Board": ["BLUE"]
+        "Rashtreeya Vidyalaya Road": {
+            "display_name": "RV Road",
+            "lines": ["GREEN"],
+            "desc": "Connects Yellow Line with the Green Line for seamless transfers between southern lines.",
+            "icon": "hub"
+        },
+        "Central Silk Board": {
+            "display_name": "Silk Board",
+            "lines": ["BLUE"],
+            "desc": "Upcoming mega interchange station connecting the Yellow Line with Blue Line bus and rail networks.",
+            "icon": "alt_route"
+        }
     }
 }

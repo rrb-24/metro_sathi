@@ -1,0 +1,106 @@
+<div class="max-w-4xl mx-auto px-gutter py-24">
+    <div class="mb-12 text-center md:text-left">
+        <h1 class="font-headline-xl text-headline-xl text-on-surface mb-4">Support &amp; Feedback</h1>
+        <p class="text-body-lg text-on-surface-variant max-w-2xl">Have a question, encountered a bug, or want to suggest a new feature? We'd love to hear from you.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <!-- Contact & Feedback Form -->
+        <div class="lg:col-span-7 bg-surface-container border border-outline-variant rounded-2xl p-8 shadow-sm">
+            <div id="support-form-container">
+                <h2 class="font-headline-md text-headline-md text-on-surface mb-6">Send Us a Message</h2>
+                <form id="support-form" class="space-y-6" onsubmit="event.preventDefault(); UI.handleSupportSubmit();">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex flex-col gap-2">
+                            <label for="support-name" class="font-label-md text-label-md text-on-surface-variant">Name</label>
+                            <input type="text" id="support-name" required class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-body-md text-on-surface focus:outline-primary" placeholder="Your Name">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="support-email" class="font-label-md text-label-md text-on-surface-variant">Email Address</label>
+                            <input type="email" id="support-email" required class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-body-md text-on-surface focus:outline-primary" placeholder="email@example.com">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="support-type" class="font-label-md text-label-md text-on-surface-variant">Topic</label>
+                        <select id="support-type" required class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-body-md text-on-surface focus:outline-primary">
+                            <option value="bug">Report a Bug / Incorrect Station Info</option>
+                            <option value="feature">Suggest a Feature</option>
+                            <option value="question">General Question</option>
+                            <option value="feedback">General Feedback</option>
+                        </select>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="support-message" class="font-label-md text-label-md text-on-surface-variant">Message</label>
+                        <textarea id="support-message" required rows="5" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-body-md text-on-surface focus:outline-primary resize-none" placeholder="How can we help you?"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary/95 transition-all shadow-sm cursor-pointer border-none flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-sm">send</span>
+                        <span>Submit Message</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Animated Success State -->
+            <div id="support-success-container" class="hidden text-center py-12 space-y-6">
+                <div class="w-20 h-20 bg-emerald-100 text-emerald-600 border border-emerald-200 rounded-full flex items-center justify-center mx-auto shadow-sm animate-pulse">
+                    <span class="material-symbols-outlined text-5xl font-bold">check</span>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="font-headline-md text-headline-md text-on-surface">Message Sent Successfully!</h3>
+                    <p class="text-body-md text-on-surface-variant max-w-sm mx-auto">
+                        Thank you for reaching out. As Metro Sathi runs completely client-side, your message has been simulated and printed to the developer console. We appreciate your feedback!
+                    </p>
+                </div>
+                <button onclick="UI.resetSupportForm();" class="px-6 py-2.5 border border-outline-variant text-on-surface hover:bg-surface-container-high font-semibold rounded-lg transition-all cursor-pointer bg-transparent">
+                    Send Another Message
+                </button>
+            </div>
+        </div>
+
+        <!-- FAQs & Quick Resources -->
+        <div class="lg:col-span-5 space-y-8">
+            <div class="bg-surface-container border border-outline-variant rounded-2xl p-8 shadow-sm">
+                <h2 class="font-headline-md text-headline-md text-on-surface mb-6">Frequently Asked Questions</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="font-headline-sm text-label-md font-bold text-on-surface mb-1">Is Metro Sathi official?</h4>
+                        <p class="text-body-sm text-on-surface-variant leading-relaxed">
+                            No. Metro Sathi is an unofficial, independent guide built by transit enthusiasts to improve commuting in Bengaluru.
+                        </p>
+                    </div>
+                    <hr class="border-outline-variant/30">
+                    <div>
+                        <h4 class="font-headline-sm text-label-md font-bold text-on-surface mb-1">Does the GPS require internet?</h4>
+                        <p class="text-body-sm text-on-surface-variant leading-relaxed">
+                            The GPS uses your device's local location hardware. While offline, the proximity tracker continues to run and falls back to a time-based simulator when you enter tunnels.
+                        </p>
+                    </div>
+                    <hr class="border-outline-variant/30">
+                    <div>
+                        <h4 class="font-headline-sm text-label-md font-bold text-on-surface mb-1">How can I report wrong platforms?</h4>
+                        <p class="text-body-sm text-on-surface-variant leading-relaxed">
+                            If you notice an incorrect platform number or terminal station label, please drop us a message using the form or create a Pull Request on GitHub.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Contacts Card -->
+            <div class="bg-surface-container-low border border-outline-variant rounded-2xl p-8 shadow-sm space-y-4">
+                <h3 class="font-headline-sm text-label-md font-bold text-on-surface">Developer Info</h3>
+                <div class="space-y-3">
+                    <p class="text-body-sm text-on-surface-variant leading-relaxed">
+                        For code inquiries, pull requests, or to submit issue reports directly, please visit our public repository:
+                    </p>
+                    <div class="flex items-center gap-3 text-on-surface-variant text-body-sm pt-2">
+                        <span class="material-symbols-outlined text-primary text-[20px]">code</span>
+                        <a href="https://github.com/rrb-24/metro_sathi" target="_blank" class="hover:underline text-primary">github.com/rrb-24/metro_sathi</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
